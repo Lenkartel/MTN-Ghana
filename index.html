@@ -1,0 +1,305 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Starlink to Cell — Powered by MTN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+    html,body{height:100%;margin:0;padding:0}
+
+    body{
+      font-family:Inter,system-ui,Arial;
+      background:#020617;
+      -webkit-font-smoothing:antialiased;
+      padding:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      color:#e5e7eb;
+    }
+
+    .page{
+      width:100%;
+      max-width:960px;
+      background:#020617;
+      border-radius:16px;
+      border:1px solid #1f2937;
+      box-shadow:0 18px 50px rgba(0,0,0,.75);
+      padding:20px 20px 24px;
+    }
+
+    .header{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+
+    .title-block h1{
+      margin:0;
+      font-size:22px;
+      color:#f8fafc;
+      letter-spacing:.2px;
+    }
+    .title-block p{
+      margin:4px 0 0;
+      font-size:13px;
+      color:#9ca3af;
+    }
+
+    .powered{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      color:#9ca3af;
+    }
+    .powered img{height:26px}
+
+    .plans-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .plan-card{
+      background:#020617;
+      border-radius:12px;
+      padding:14px;
+      border:1px solid #1f2937;
+      cursor:pointer;
+      text-align:left;
+      color:#e5e7eb;
+      transition:
+        transform .15s ease,
+        border-color .15s ease,
+        box-shadow .15s ease,
+        background-color .15s ease;
+      outline:none;
+      appearance:none;
+    }
+
+    .plan-card:hover{
+      transform:translateY(-2px);
+      border-color:#ffd400;
+      box-shadow:0 10px 24px rgba(255,212,0,.25);
+    }
+
+    .plan-card:active{
+      transform:translateY(0);
+      box-shadow:0 4px 12px rgba(0,0,0,.6);
+    }
+
+    .plan-card[data-plan-id="unlimited"]{
+      border-color:#ffd400;
+      box-shadow:
+        0 0 0 1px rgba(255,212,0,.4),
+        0 10px 28px rgba(255,212,0,.35);
+    }
+
+    .plan-card[data-plan-id="unlimited"] .plan-tag{
+      background:rgba(255,212,0,.18);
+      color:#fff3b0;
+      border-color:#ffd400;
+    }
+
+    .plan-tag{
+      font-size:11px;
+      padding:3px 8px;
+      border-radius:999px;
+      border:1px solid #ffd400;
+      color:#ffe680;
+      display:inline-block;
+      margin-bottom:6px;
+      background:rgba(255,212,0,.1);
+    }
+
+    .plan-name{font-size:15px;font-weight:600;color:#f8fafc}
+    .plan-duration{font-size:12px;color:#9ca3af;margin-bottom:6px}
+    .plan-price{font-size:17px;font-weight:700;color:#ffd400;margin-bottom:8px}
+    .plan-cta{font-size:12px;color:#ffe680}
+
+    .note{
+      margin-top:12px;
+      font-size:12px;
+      color:#9ca3af;
+      line-height:1.4;
+    }
+
+    .btn{
+      border-radius:10px;
+      padding:9px 14px;
+      border:0;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:600;
+      transition:background-color .15s ease, box-shadow .15s ease;
+    }
+
+    .btn-ghost{background:#1f2937;color:#e5e7eb}
+    .btn-primary{background:#ffd400;color:#000}
+
+    @media(max-width:720px){
+      .plans-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:480px){
+      .plans-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+  <header class="header">
+    <div class="title-block">
+      <h1>Starlink to Cell — Data Plans</h1>
+      <p>Fast, reliable satellite data, paid instantly via MTN.</p>
+    </div>
+    <div class="powered">
+      <span>Powered by</span>
+      <img src="assets/mtn.svg" alt="MTN logo">
+    </div>
+  </header>
+
+  <section class="plans">
+    <div class="plans-grid">
+      <button type="button" class="plan-card" data-plan-id="15gb">
+        <div class="plan-tag">Best for light users</div>
+        <div class="plan-name">15GB Data</div>
+        <div class="plan-duration">7-Day Plan</div>
+        <div class="plan-price">GHS 9.99</div>
+        <div class="plan-cta">View details & pay →</div>
+      </button>
+
+      <button type="button" class="plan-card" data-plan-id="35gb">
+        <div class="plan-tag">Balanced</div>
+        <div class="plan-name">35GB Data</div>
+        <div class="plan-duration">14-Day Plan</div>
+        <div class="plan-price">GHS 19.99</div>
+        <div class="plan-cta">View details & pay →</div>
+      </button>
+
+      <button type="button" class="plan-card" data-plan-id="50gb">
+        <div class="plan-tag">Heavy use</div>
+        <div class="plan-name">50GB Data</div>
+        <div class="plan-duration">21-Day Plan</div>
+        <div class="plan-price">GHS 32.99</div>
+        <div class="plan-cta">View details & pay →</div>
+      </button>
+
+      <button type="button" class="plan-card" data-plan-id="unlimited">
+        <div class="plan-tag">Most popular</div>
+        <div class="plan-name">Monthly Unlimited</div>
+        <div class="plan-duration">30-Day Plan</div>
+        <div class="plan-price">GHS 43.99</div>
+        <div class="plan-cta">View details & pay →</div>
+      </button>
+    </div>
+
+    <div class="note">
+      Selecting a plan will redirect you to a secure MTN payment page.<br>
+      Your Starlink to Cell plan will be activated after our team enrolls your line.
+    </div>
+  </section>
+</div>
+
+<div class="modal-overlay" id="planModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Plan details</div>
+      <button class="modal-close" id="closeModal">×</button>
+    </div>
+
+    <div class="modal-body">
+      <p id="modalPlanSummary"></p>
+      <div class="modal-details" id="modalPlanSpecs"></div>
+      <p style="font-size:13px;color:#9ca3af">
+        You’ll complete payment using MTN.
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="cancelPlan">Cancel</button>
+      <button class="btn btn-primary" id="payButton">Pay with MTN</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const plans={
+  "15gb":{
+    name:"15GB Data — 7 Day Plan",
+    price:"GHS 9.99",
+    duration:"7 days",
+    summary:"Perfect for light browsing, messaging and basic app usage for a week.",
+    specs:["15GB total data","Valid for 7 days"]
+  },
+  "35gb":{
+    name:"35GB Data — 14 Day Plan",
+    price:"GHS 19.99",
+    duration:"14 days",
+    summary:"Great for regular browsing and social media over two weeks.",
+    specs:["35GB total data","Valid for 14 days"]
+  },
+  "50gb":{
+    name:"50GB Data — 21 Day Plan",
+    price:"GHS 32.99",
+    duration:"21 days",
+    summary:"For heavier usage including streaming and uploads.",
+    specs:["50GB total data","Valid for 21 days"]
+  },
+  "unlimited":{
+    name:"Monthly Unlimited Plan",
+    price:"GHS 43.99",
+    duration:"30 days",
+    summary:"Unlimited usage subject to fair use policies.",
+    specs:["Unlimited data","Valid for 30 days"]
+  }
+};
+
+const modal=document.getElementById('planModal');
+const modalTitle=document.getElementById('modalTitle');
+const modalPlanSummary=document.getElementById('modalPlanSummary');
+const modalPlanSpecs=document.getElementById('modalPlanSpecs');
+const payButton=document.getElementById('payButton');
+
+let selectedPlan=null;
+
+document.querySelectorAll('.plan-card').forEach(card=>{
+  card.onclick=()=>{
+    selectedPlan = plans[card.dataset.planId];
+    sessionStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
+    sessionStorage.setItem('selectedPlanId', card.dataset.planId);
+
+    modalTitle.textContent=selectedPlan.name;
+    modalPlanSummary.textContent=selectedPlan.summary;
+    modalPlanSpecs.innerHTML=
+      `<div><strong>Price:</strong> ${selectedPlan.price}</div>
+       <div><strong>Validity:</strong> ${selectedPlan.duration}</div>
+       <ul>${selectedPlan.specs.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+    modal.style.display='flex';
+  };
+});
+
+document.getElementById('closeModal').onclick=
+document.getElementById('cancelPlan').onclick=()=>{
+  modal.style.display='none';
+};
+
+payButton.onclick=()=>{
+  sessionStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
+  location.href='login.html';
+};
+</script>
+
+</body>
+</html>
