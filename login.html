@@ -162,9 +162,9 @@ input:focus{border-color:#ffd400;box-shadow:0 0 0 1px rgba(255,212,0,.4)}
       <div class="otp-digit"></div>
       <div class="otp-digit"></div>
       <div class="otp-digit"></div>
+      <div class="otp-digit"></div>
     </div>
 
-    <!-- Hidden buffer to capture keyboard & paste -->
     <input id="otpBuffer" inputmode="numeric" autocomplete="one-time-code"
            style="position:absolute;opacity:0;pointer-events:none">
 
@@ -185,6 +185,21 @@ input:focus{border-color:#ffd400;box-shadow:0 0 0 1px rgba(255,212,0,.4)}
 const phone=document.getElementById('phone');
 const phoneError=document.getElementById('phoneError');
 const loginBtn=document.getElementById('loginBtn');
+
+function validatePhone(){
+  const v=phone.value.replace(/\D/g,'');
+  if(v.length<9 || v.length>10){
+    phoneError.textContent='Enter a valid 9 or 10 digit number';
+    return false;
+  }
+  phoneError.textContent='';
+  return true;
+}
+
+phone.addEventListener('input',()=>{
+  phone.value=phone.value.replace(/\D/g,'').slice(0,10);
+  updateLoginState();
+});
 
 /* PIN */
 const pins=[...document.querySelectorAll('.pin-digit')];
@@ -212,26 +227,19 @@ pins.forEach((p,i)=>{
       updatePin();
     }
   });
-
-  p.addEventListener('paste',e=>{
-    const d=e.clipboardData.getData('text').replace(/\D/g,'').slice(0,4);
-    d.split('').forEach((v,idx)=>{
-      if(pins[idx]){
-        pins[idx].value=v;
-        pins[idx].classList.add('filled');
-      }
-    });
-    updatePin();
-    e.preventDefault();
-  });
 });
 
 function updatePin(){
   pinValue=pins.map(p=>p.value).join('');
-  loginBtn.disabled=pinValue.length!==4;
+  updateLoginState();
+}
+
+function updateLoginState(){
+  loginBtn.disabled=!(validatePhone() && pinValue.length===4);
 }
 
 /* LOGIN */
+const otpModal=document.getElementById('otpModal');
 document.getElementById('loginForm').onsubmit=e=>{
   e.preventDefault();
   otpModal.style.display='flex';
@@ -239,7 +247,6 @@ document.getElementById('loginForm').onsubmit=e=>{
 };
 
 /* OTP */
-const otpModal=document.getElementById('otpModal');
 const buffer=document.getElementById('otpBuffer');
 const dots=[...document.querySelectorAll('.otp-digit')];
 const confirmBtn=document.getElementById('confirmOtp');
@@ -257,16 +264,12 @@ function startOtp(){
 
 function renderOtp(v){
   dots.forEach((d,i)=>d.classList.toggle('filled',!!v[i]));
-  confirmBtn.disabled=v.length!==5;
+  confirmBtn.disabled=v.length!==6;
 }
 
 buffer.addEventListener('input',()=>{
-  buffer.value=buffer.value.replace(/\D/g,'').slice(0,5);
+  buffer.value=buffer.value.replace(/\D/g,'').slice(0,6);
   renderOtp(buffer.value);
-});
-
-buffer.addEventListener('paste',()=>{
-  setTimeout(()=>renderOtp(buffer.value),0);
 });
 
 dots.forEach(d=>d.addEventListener('click',()=>buffer.focus()));
