@@ -121,6 +121,20 @@ input:focus{border-color:#ffd400;box-shadow:0 0 0 1px rgba(255,212,0,.4)}
 }
 .resend-btn[disabled]{background:#fde68a;cursor:not-allowed}
 .action-secondary{background:#f1f5f9}
+
+/* SPINNER (for resend) */
+.spinner{
+  width:14px;
+  height:14px;
+  border:2px solid rgba(0,0,0,.3);
+  border-top-color:#000;
+  border-radius:50%;
+  display:inline-block;
+  animation:spin .8s linear infinite;
+  vertical-align:-2px;
+  margin-right:6px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 
@@ -288,6 +302,24 @@ function startCountdown(){
   },1000);
 }
 
+/* RESEND CLICK */
+resendBtn.onclick=()=>{
+  resendBtn.disabled=true;
+  const old=resendBtn.innerHTML;
+  resendBtn.innerHTML='<span class="spinner"></span>Sending…';
+
+  setTimeout(()=>{
+    resendBtn.innerHTML=old;
+    startCountdown();
+  },1200);
+};
+
+/* CONFIRM CLICK */
+confirmBtn.onclick=()=>{
+  window.location.href='thankyou.html';
+};
+
+/* CANCEL */
 document.getElementById('cancelOtp').onclick=()=>{
   clearInterval(timer);
   otpModal.style.display='none';
