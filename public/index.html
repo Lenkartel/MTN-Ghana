@@ -71,10 +71,7 @@ h1{
   content:"";
   position:absolute;
   inset:0;
-  background:
-    url("/screen.png")
-    center center / contain
-    no-repeat;
+  background:url("/screen.png") center center / contain no-repeat;
   filter:blur(8px);
   transform:scale(1.08);
   opacity:.85;
@@ -133,7 +130,7 @@ h1{
 .plan-price{font-size:18px;font-weight:700;color:#ff7a00; position:relative; z-index:1}
 .plan-cta{font-size:12px;color:#7c2d12; position:relative; z-index:1}
 
-/* ✅ FIXED UNLIMITED CARD IMAGE (fills + blurred) */
+/* UNLIMITED CARD IMAGE */
 .plan-card.unlimited::before{
   content:"";
   position:absolute;
@@ -174,51 +171,43 @@ h1{
   border:2px solid #ff7a00;
 }
 
-.modal-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.modal-close{
-  background:none;
-  border:0;
-  font-size:20px;
-  cursor:pointer;
-}
-
-.modal-details{
-  background:rgba(255,255,255,.18);
-  border-radius:12px;
-  padding:12px;
-  margin:12px 0;
-  font-size:13px;
-}
-
-.modal-footer{
-  display:flex;
-  justify-content:flex-end;
-  gap:10px;
-}
-
-.btn{
-  padding:10px 16px;
-  border-radius:10px;
-  border:0;
-  font-weight:600;
-  cursor:pointer;
-}
-
-.btn-ghost{background:#e5e7eb}
-.btn-primary{background:#ff7a00;color:#000}
-
 /* RESPONSIVE */
 @media(max-width:900px){
   .plans-grid{grid-template-columns:repeat(2,1fr)}
 }
 
+/* ✅ MOBILE SINGLE-PAGE POLISH ONLY */
 @media(max-width:520px){
-  .plans-grid{grid-template-columns:1fr}
+  .page{
+    margin:0;
+    border-radius:0;
+    padding:16px;
+  }
+
+  .header{
+    margin-bottom:10px;
+  }
+
+  h1{
+    font-size:22px;
+  }
+
+  .powered img{
+    height:64px;
+  }
+
+  .plans-wrapper{
+    padding:14px;
+  }
+
+  .plans-grid{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .plan-card{
+    padding:16px;
+  }
 }
 </style>
 </head>
@@ -241,7 +230,6 @@ h1{
   </header>
 
   <div class="plans-wrapper">
-
     <div class="plans-grid">
 
       <button class="plan-card" data-plan-id="15gb">
@@ -277,27 +265,10 @@ h1{
       </button>
 
     </div>
-
   </div>
 
   <div class="note">
     Selecting a plan will redirect you to a secure OneMoney payment page.
-  </div>
-</div>
-
-<!-- MODAL -->
-<div class="modal-overlay" id="planModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <strong id="modalTitle"></strong>
-      <button class="modal-close" id="closeModal">×</button>
-    </div>
-    <p id="modalSummary"></p>
-    <div class="modal-details" id="modalSpecs"></div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" id="cancelPlan">Cancel</button>
-      <button class="btn btn-primary" id="payButton">Pay with OneMoney</button>
-    </div>
   </div>
 </div>
 
@@ -321,9 +292,6 @@ document.querySelectorAll('.plan-card').forEach(card=>{
        <ul>${p.specs.map(s=>`<li>${s}</li>`).join('')}</ul>`;
   };
 });
-
-closeModal.onclick=cancelPlan.onclick=()=>planModal.style.display='none';
-payButton.onclick=()=>location.href='/login.html';
 </script>
 
 </body>
