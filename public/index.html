@@ -58,7 +58,7 @@ h1{
 
 .powered img{height:96px}
 
-/* PLANS WRAPPER (image lives HERE) */
+/* PLANS WRAPPER */
 .plans-wrapper{
   position:relative;
   border-radius:22px;
@@ -66,7 +66,7 @@ h1{
   padding:22px;
 }
 
-/* BACKGROUND IMAGE (centered + blurred) */
+/* BACKGROUND IMAGE */
 .plans-wrapper::before{
   content:"";
   position:absolute;
@@ -81,7 +81,6 @@ h1{
   z-index:0;
 }
 
-/* soft overlay for contrast */
 .plans-wrapper::after{
   content:"";
   position:absolute;
@@ -99,7 +98,7 @@ h1{
   z-index:1;
 }
 
-/* PLAN CARDS (true transparent) */
+/* PLAN CARDS */
 .plan-card{
   background:rgba(255,255,255,.08);
   backdrop-filter:blur(6px);
@@ -108,6 +107,8 @@ h1{
   border:2px solid #ff7a00;
   cursor:pointer;
   transition:transform .3s ease, box-shadow .3s ease;
+  position:relative;
+  overflow:hidden;
 }
 
 .plan-card:hover{
@@ -127,18 +128,21 @@ h1{
 }
 
 /* TEXT */
-.plan-name{font-weight:600}
-.plan-duration{font-size:12px;color:#374151;margin:4px 0}
-.plan-price{font-size:18px;font-weight:700;color:#ff7a00}
-.plan-cta{font-size:12px;color:#7c2d12}
+.plan-name{font-weight:600; position:relative; z-index:1}
+.plan-duration{font-size:12px;color:#374151;margin:4px 0; position:relative; z-index:1}
+.plan-price{font-size:18px;font-weight:700;color:#ff7a00; position:relative; z-index:1}
+.plan-cta{font-size:12px;color:#7c2d12; position:relative; z-index:1}
 
-/* UNLIMITED CARD IMAGE */
-.plan-card.unlimited{
-  background:
-    rgba(255,255,255,.12)
-    url("/netone.webp")
-    center / contain
-    no-repeat;
+/* ✅ FIXED UNLIMITED CARD IMAGE (fills + blurred) */
+.plan-card.unlimited::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("/netone.webp") center / cover no-repeat;
+  filter:blur(6px);
+  transform:scale(1.1);
+  opacity:.9;
+  z-index:0;
 }
 
 /* NOTE */
@@ -236,7 +240,6 @@ h1{
     </div>
   </header>
 
-  <!-- PLANS START IMMEDIATELY AFTER LOGO -->
   <div class="plans-wrapper">
 
     <div class="plans-grid">
