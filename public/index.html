@@ -66,14 +66,14 @@ h1{
   padding:22px;
 }
 
-/* BACKGROUND IMAGE */
+/* BACKGROUND IMAGE — moved UP */
 .plans-wrapper::before{
   content:"";
   position:absolute;
-  inset:0;
-  background:url("/screen.png") center center / contain no-repeat;
+  inset:-40px 0 -10px 0;
+  background:url("/screen.png") center top / contain no-repeat;
   filter:blur(8px);
-  transform:scale(1.08);
+  transform:scale(1.05);
   opacity:.85;
   z-index:0;
 }
@@ -125,19 +125,27 @@ h1{
 }
 
 /* TEXT */
-.plan-name{font-weight:600; position:relative; z-index:1}
-.plan-duration{font-size:12px;color:#374151;margin:4px 0; position:relative; z-index:1}
-.plan-price{font-size:18px;font-weight:700;color:#ff7a00; position:relative; z-index:1}
-.plan-cta{font-size:12px;color:#7c2d12; position:relative; z-index:1}
+.plan-name,
+.plan-duration,
+.plan-price,
+.plan-cta{
+  position:relative;
+  z-index:1;
+}
 
-/* UNLIMITED CARD IMAGE */
+.plan-name{font-weight:600}
+.plan-duration{font-size:12px;color:#374151;margin:4px 0}
+.plan-price{font-size:18px;font-weight:700;color:#ff7a00}
+.plan-cta{font-size:12px;color:#7c2d12}
+
+/* UNLIMITED CARD IMAGE — zoomed OUT */
 .plan-card.unlimited::before{
   content:"";
   position:absolute;
   inset:0;
-  background:url("/netone.webp") center / cover no-repeat;
-  filter:blur(6px);
-  transform:scale(1.1);
+  background:url("/netone.webp") center / 85% no-repeat;
+  filter:blur(5px);
+  transform:scale(1.02);
   opacity:.9;
   z-index:0;
 }
@@ -171,43 +179,26 @@ h1{
   border:2px solid #ff7a00;
 }
 
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-close{
+  background:none;
+  border:0;
+  font-size:20px;
+  cursor:pointer;
+}
+
 /* RESPONSIVE */
 @media(max-width:900px){
   .plans-grid{grid-template-columns:repeat(2,1fr)}
 }
 
-/* ✅ MOBILE SINGLE-PAGE POLISH ONLY */
 @media(max-width:520px){
-  .page{
-    margin:0;
-    border-radius:0;
-    padding:16px;
-  }
-
-  .header{
-    margin-bottom:10px;
-  }
-
-  h1{
-    font-size:22px;
-  }
-
-  .powered img{
-    height:64px;
-  }
-
-  .plans-wrapper{
-    padding:14px;
-  }
-
-  .plans-grid{
-    grid-template-columns:1fr;
-    gap:14px;
-  }
-
-  .plan-card{
-    padding:16px;
-  }
+  .plans-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -269,6 +260,18 @@ h1{
 
   <div class="note">
     Selecting a plan will redirect you to a secure OneMoney payment page.
+  </div>
+</div>
+
+<!-- ✅ MODAL (RESTORED & WORKING) -->
+<div class="modal-overlay" id="planModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <strong id="modalTitle"></strong>
+      <button class="modal-close" onclick="planModal.style.display='none'">×</button>
+    </div>
+    <p id="modalSummary"></p>
+    <div id="modalSpecs"></div>
   </div>
 </div>
 
