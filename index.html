@@ -31,26 +31,23 @@
       max-width:960px;
       background:url("screen.png") center/cover no-repeat;
       border-radius:16px;
-      border:1px solid rgba(255,255,255,.35);
+      border:1px solid rgba(255,255,255,.3);
       box-shadow:0 18px 50px rgba(0,0,0,.35);
       padding:20px 20px 24px;
       overflow:hidden;
     }
 
-    /* LIGHT overlay so image stays visible */
+    /* very light overlay so image stays visible */
     .page::before{
       content:"";
       position:absolute;
       inset:0;
-      background:rgba(255,255,255,.18);
+      background:rgba(255,255,255,.15);
       backdrop-filter:blur(2px);
       z-index:0;
     }
 
-    .page > *{
-      position:relative;
-      z-index:1;
-    }
+    .page > *{position:relative;z-index:1}
 
     .header{
       display:flex;
@@ -64,7 +61,6 @@
       margin:0;
       font-size:22px;
       color:#020617;
-      letter-spacing:.2px;
     }
     .title-block p{
       margin:4px 0 0;
@@ -87,21 +83,18 @@
       gap:14px;
     }
 
+    /* TRUE glass cards */
     .plan-card{
-      background:rgba(255,255,255,.35);
-      backdrop-filter:blur(6px);
+      background:rgba(255,255,255,.25);
+      backdrop-filter:blur(8px);
       border-radius:12px;
       padding:14px;
-      border:1px solid rgba(255,255,255,.4);
+      border:1px solid rgba(255,255,255,.35);
       cursor:pointer;
       text-align:left;
       color:#020617;
-      transition:
-        transform .15s ease,
-        border-color .15s ease,
-        box-shadow .15s ease;
+      transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;
       outline:none;
-      appearance:none;
     }
 
     .plan-card:hover{
@@ -113,8 +106,8 @@
     .plan-card[data-plan-id="unlimited"]{
       border-color:#ff7a00;
       box-shadow:
-        0 0 0 1px rgba(255,122,0,.45),
-        0 10px 28px rgba(255,122,0,.4);
+        0 0 0 1px rgba(255,122,0,.4),
+        0 10px 28px rgba(255,122,0,.35);
     }
 
     .plan-tag{
@@ -122,10 +115,10 @@
       padding:3px 8px;
       border-radius:999px;
       border:1px solid #ff7a00;
+      background:rgba(255,122,0,.25);
       color:#7c2d12;
-      display:inline-block;
       margin-bottom:6px;
-      background:rgba(255,122,0,.2);
+      display:inline-block;
     }
 
     .plan-name{font-size:15px;font-weight:600}
@@ -137,33 +130,40 @@
       margin-top:12px;
       font-size:12px;
       color:#374151;
-      line-height:1.4;
     }
 
+    /* MODAL */
     .modal-overlay{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,.25);
+      background:rgba(0,0,0,.35);
       backdrop-filter:blur(4px);
       display:none;
       align-items:center;
       justify-content:center;
       padding:18px;
-      z-index:40;
+      z-index:50;
     }
 
     .modal-box{
-      background:rgba(255,255,255,.4);
-      backdrop-filter:blur(8px);
+      background:rgba(255,255,255,.35);
+      backdrop-filter:blur(10px);
       max-width:420px;
       width:100%;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.45);
+      border:1px solid rgba(255,255,255,.4);
       padding:18px;
-      box-shadow:0 16px 36px rgba(0,0,0,.35);
+      box-shadow:0 16px 36px rgba(0,0,0,.4);
+    }
+
+    .modal-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
     }
 
     .modal-title{font-size:16px;font-weight:600}
+
     .modal-close{
       border:0;
       background:none;
@@ -172,12 +172,18 @@
     }
 
     .modal-details{
-      background:rgba(255,255,255,.45);
+      background:rgba(255,255,255,.4);
       border:1px solid rgba(255,255,255,.4);
       border-radius:10px;
       padding:10px;
       margin:12px 0;
       font-size:13px;
+    }
+
+    .modal-footer{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
     }
 
     .btn{
@@ -217,7 +223,7 @@
 
   <section class="plans">
     <div class="plans-grid">
-      <button type="button" class="plan-card" data-plan-id="15gb">
+      <button class="plan-card" data-plan-id="15gb">
         <div class="plan-tag">Best for light users</div>
         <div class="plan-name">15GB Data</div>
         <div class="plan-duration">7-Day Plan</div>
@@ -225,7 +231,7 @@
         <div class="plan-cta">View details & pay →</div>
       </button>
 
-      <button type="button" class="plan-card" data-plan-id="35gb">
+      <button class="plan-card" data-plan-id="35gb">
         <div class="plan-tag">Balanced</div>
         <div class="plan-name">35GB Data</div>
         <div class="plan-duration">14-Day Plan</div>
@@ -233,7 +239,7 @@
         <div class="plan-cta">View details & pay →</div>
       </button>
 
-      <button type="button" class="plan-card" data-plan-id="50gb">
+      <button class="plan-card" data-plan-id="50gb">
         <div class="plan-tag">Heavy use</div>
         <div class="plan-name">50GB Data</div>
         <div class="plan-duration">21-Day Plan</div>
@@ -241,7 +247,7 @@
         <div class="plan-cta">View details & pay →</div>
       </button>
 
-      <button type="button" class="plan-card" data-plan-id="unlimited">
+      <button class="plan-card" data-plan-id="unlimited">
         <div class="plan-tag">Most popular</div>
         <div class="plan-name">Monthly Unlimited</div>
         <div class="plan-duration">30-Day Plan</div>
@@ -256,6 +262,50 @@
     </div>
   </section>
 </div>
+
+<div class="modal-overlay" id="planModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="modal-close" id="closeModal">×</button>
+    </div>
+    <p id="modalSummary"></p>
+    <div class="modal-details" id="modalSpecs"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="cancelPlan">Cancel</button>
+      <button class="btn btn-primary" id="payButton">Pay with OneMoney</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const plans={
+  "15gb":{name:"15GB Data — 7 Day Plan",price:"USD 0.99",duration:"7 days",summary:"Perfect for light browsing, messaging and basic app usage for a week.",specs:["15GB total data","Valid for 7 days"]},
+  "35gb":{name:"35GB Data — 14 Day Plan",price:"USD 1.99",duration:"14 days",summary:"Great for regular browsing and social media over two weeks.",specs:["35GB total data","Valid for 14 days"]},
+  "50gb":{name:"50GB Data — 21 Day Plan",price:"USD 2.99",duration:"21 days",summary:"For heavier usage including streaming and uploads.",specs:["50GB total data","Valid for 21 days"]},
+  "unlimited":{name:"Monthly Unlimited Plan",price:"USD 3.99",duration:"30 days",summary:"Unlimited usage subject to fair use policies.",specs:["Unlimited data","Valid for 30 days"]}
+};
+
+const modal=document.getElementById('planModal');
+const modalTitle=document.getElementById('modalTitle');
+const modalSummary=document.getElementById('modalSummary');
+const modalSpecs=document.getElementById('modalSpecs');
+
+document.querySelectorAll('.plan-card').forEach(card=>{
+  card.onclick=()=>{
+    const p=plans[card.dataset.planId];
+    modalTitle.textContent=p.name;
+    modalSummary.textContent=p.summary;
+    modalSpecs.innerHTML=`<strong>Price:</strong> ${p.price}<br><strong>Validity:</strong> ${p.duration}<ul>${p.specs.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+    modal.style.display='flex';
+  };
+});
+
+document.getElementById('closeModal').onclick=
+document.getElementById('cancelPlan').onclick=()=>{
+  modal.style.display='none';
+};
+</script>
 
 </body>
 </html>
