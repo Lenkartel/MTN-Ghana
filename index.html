@@ -25,13 +25,13 @@
       width:100%;
       max-width:960px;
       min-height:80vh;
-      background:#fff;
+      background:transparent; /* KEY FIX */
       border-radius:16px;
       box-shadow:0 18px 50px rgba(0,0,0,.45);
       overflow:hidden;
     }
 
-    /* IMAGE LAYER */
+    /* IMAGE LAYER (BASE) */
     .bg-image{
       position:absolute;
       inset:0;
@@ -39,11 +39,12 @@
       align-items:center;
       justify-content:center;
       z-index:0;
+      background:#fff; /* image sits on white like real mockups */
     }
 
     .bg-image img{
-      max-height:100%;
       max-width:100%;
+      max-height:100%;
       object-fit:contain;
     }
 
@@ -80,15 +81,15 @@
       gap:14px;
     }
 
-    /* GLASS CARDS */
+    /* TRUE GLASS CARDS (MATCH MODAL) */
     .plan-card{
-      background:rgba(255,255,255,.45);
-      backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.35);
+      backdrop-filter:blur(14px);
       border-radius:12px;
       padding:14px;
-      border:1px solid rgba(255,255,255,.4);
+      border:1px solid rgba(255,255,255,.55); /* clear outline */
       cursor:pointer;
-      transition:.15s;
+      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
     }
 
     .plan-card:hover{
@@ -99,8 +100,9 @@
 
     .plan-card[data-plan-id="unlimited"]{
       border-color:#ff7a00;
-      box-shadow:0 0 0 1px rgba(255,122,0,.4),
-                 0 10px 28px rgba(255,122,0,.35);
+      box-shadow:
+        0 0 0 1px rgba(255,122,0,.45),
+        0 10px 28px rgba(255,122,0,.35);
     }
 
     .plan-tag{
@@ -138,12 +140,13 @@
     }
 
     .modal-box{
-      background:rgba(255,255,255,.45);
-      backdrop-filter:blur(12px);
+      background:rgba(255,255,255,.35);
+      backdrop-filter:blur(14px);
       width:100%;
       max-width:420px;
       border-radius:14px;
       padding:18px;
+      border:1px solid rgba(255,255,255,.55);
     }
 
     .modal-header{
@@ -160,7 +163,8 @@
     }
 
     .modal-details{
-      background:rgba(255,255,255,.45);
+      background:rgba(255,255,255,.35);
+      border:1px solid rgba(255,255,255,.55);
       border-radius:10px;
       padding:10px;
       margin:12px 0;
