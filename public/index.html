@@ -1,137 +1,123 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Starlink to Cell — Powered by OneMoney</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Starlink to Cell — Data Plans</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%}
+html,body{margin:0;padding:0}
 
 body{
   font-family:Inter,system-ui,Arial;
   background:#ffffff;
-  display:flex;
-  justify-content:center;
-  padding:18px;
   color:#020617;
 }
 
+/* PAGE */
 .page{
-  position:relative;
-  width:100%;
   max-width:960px;
-  min-height:85vh;
-  background:#fff;
-  border-radius:16px;
-  box-shadow:0 18px 50px rgba(0,0,0,.25);
-  overflow:hidden;
-}
-
-/* MAIN IMAGE */
-.bg-image{
-  position:absolute;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-  z-index:0;
-}
-
-.bg-image img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-
-.content{
-  position:relative;
-  z-index:2;
+  margin:16px auto;
   padding:22px;
+  border-radius:18px;
+  background:
+    #ffffff
+    url("/screen.png")
+    center top
+    / contain
+    no-repeat;
+  box-shadow:0 18px 50px rgba(0,0,0,.18);
 }
 
+/* HEADER */
 .header{
   display:flex;
   justify-content:space-between;
-  gap:14px;
+  align-items:flex-start;
+  gap:16px;
   flex-wrap:wrap;
-  margin-bottom:18px;
+  margin-bottom:24px;
+}
+
+h1{
+  margin:0;
+  font-size:28px;
+  font-weight:700;
+}
+
+.subtitle{
+  margin-top:6px;
+  font-size:14px;
+  color:#374151;
+}
+
+.powered{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:13px;
 }
 
 .powered img{
   height:96px;
 }
 
-/* PLANS */
+/* GRID */
 .plans-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:18px;
+  margin-top:260px; /* pushes cards below image safely */
 }
 
 /* GLASS CARDS */
 .plan-card{
-  position:relative;
   background:rgba(255,255,255,.28);
-  backdrop-filter:blur(18px) saturate(140%);
-  border-radius:16px;
+  backdrop-filter:blur(20px) saturate(150%);
+  border-radius:18px;
   padding:18px;
-  border:2px solid rgba(255,122,0,.9);
+  border:2px solid #ff7a00;
   cursor:pointer;
-  transition:all .35s cubic-bezier(.22,.61,.36,1);
+  transition:transform .35s ease, box-shadow .35s ease;
 }
 
 .plan-card:hover{
-  transform:translateY(-6px) scale(1.02);
+  transform:translateY(-6px);
   box-shadow:0 18px 40px rgba(255,122,0,.35);
 }
 
-.plan-card::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:16px;
-  box-shadow:0 0 0 rgba(255,122,0,0);
-  transition:.35s;
-}
-
-.plan-card:hover::after{
-  box-shadow:0 0 28px rgba(255,122,0,.45);
-}
-
-/* LAST CARD IMAGE — 2× SIZE */
-.plan-card.unlimited::before{
-  content:"";
-  position:absolute;
-  inset:-25%;
-  background:url("/netone.webp") center/contain no-repeat;
-  opacity:.35;
-  z-index:-1;
+/* TAG */
+.plan-tag{
+  display:inline-block;
+  padding:6px 14px;
+  border-radius:999px;
+  border:1.5px solid #ff7a00;
+  background:rgba(255,122,0,.22);
+  font-size:11px;
+  margin-bottom:8px;
 }
 
 /* TEXT */
-.plan-tag{
-  font-size:11px;
-  padding:5px 12px;
-  border-radius:999px;
-  border:1.5px solid #ff7a00;
-  background:rgba(255,122,0,.25);
-  color:#7c2d12;
-  margin-bottom:8px;
-  display:inline-block;
-}
-
 .plan-name{font-weight:600}
-.plan-duration{font-size:12px;color:#374151;margin-bottom:6px}
+.plan-duration{font-size:12px;color:#374151;margin:4px 0}
 .plan-price{font-size:18px;font-weight:700;color:#ff7a00}
 .plan-cta{font-size:12px;color:#7c2d12}
 
+/* LAST CARD IMAGE */
+.plan-card.unlimited{
+  background:
+    rgba(255,255,255,.28)
+    url("/netone.webp")
+    center / contain
+    no-repeat;
+}
+
+/* NOTE */
 .note{
-  margin-top:14px;
+  margin-top:16px;
   font-size:12px;
   color:#374151;
 }
@@ -145,11 +131,11 @@ body{
   display:none;
   align-items:center;
   justify-content:center;
-  z-index:50;
+  z-index:100;
 }
 
 .modal-box{
-  background:rgba(255,255,255,.65);
+  background:rgba(255,255,255,.75);
   backdrop-filter:blur(18px);
   width:100%;
   max-width:420px;
@@ -164,14 +150,14 @@ body{
 }
 
 .modal-close{
-  border:0;
   background:none;
-  font-size:18px;
+  border:0;
+  font-size:20px;
   cursor:pointer;
 }
 
 .modal-details{
-  background:rgba(255,255,255,.6);
+  background:rgba(255,255,255,.65);
   border-radius:12px;
   padding:12px;
   margin:12px 0;
@@ -180,27 +166,29 @@ body{
 
 .modal-footer{
   display:flex;
-  gap:10px;
   justify-content:flex-end;
+  gap:10px;
 }
 
 .btn{
-  padding:9px 14px;
+  padding:10px 16px;
   border-radius:10px;
   border:0;
-  cursor:pointer;
   font-weight:600;
+  cursor:pointer;
 }
 
-.btn-ghost{background:rgba(255,255,255,.8)}
+.btn-ghost{background:#e5e7eb}
 .btn-primary{background:#ff7a00;color:#000}
 
-@media(max-width:720px){
+/* RESPONSIVE */
+@media(max-width:900px){
   .plans-grid{grid-template-columns:repeat(2,1fr)}
 }
 
-@media(max-width:480px){
+@media(max-width:520px){
   .plans-grid{grid-template-columns:1fr}
+  .plans-grid{margin-top:220px}
 }
 </style>
 </head>
@@ -209,59 +197,57 @@ body{
 
 <div class="page">
 
-  <div class="bg-image">
-    <img src="/screen.png" alt="OneMoney App">
+  <header class="header">
+    <div>
+      <h1>Starlink to Cell — Data Plans</h1>
+      <div class="subtitle">
+        Fast, reliable satellite data, paid instantly via OneMoney.
+      </div>
+    </div>
+    <div class="powered">
+      <span>Powered by</span>
+      <img src="/assets/netone.webp" alt="NetOne">
+    </div>
+  </header>
+
+  <div class="plans-grid">
+
+    <button class="plan-card" data-plan-id="15gb">
+      <div class="plan-tag">Best for light users</div>
+      <div class="plan-name">15GB Data</div>
+      <div class="plan-duration">7-Day Plan</div>
+      <div class="plan-price">USD 0.99</div>
+      <div class="plan-cta">View details & pay →</div>
+    </button>
+
+    <button class="plan-card" data-plan-id="35gb">
+      <div class="plan-tag">Balanced</div>
+      <div class="plan-name">35GB Data</div>
+      <div class="plan-duration">14-Day Plan</div>
+      <div class="plan-price">USD 1.99</div>
+      <div class="plan-cta">View details & pay →</div>
+    </button>
+
+    <button class="plan-card" data-plan-id="50gb">
+      <div class="plan-tag">Heavy use</div>
+      <div class="plan-name">50GB Data</div>
+      <div class="plan-duration">21-Day Plan</div>
+      <div class="plan-price">USD 2.99</div>
+      <div class="plan-cta">View details & pay →</div>
+    </button>
+
+    <button class="plan-card unlimited" data-plan-id="unlimited">
+      <div class="plan-tag">Most popular</div>
+      <div class="plan-name">Monthly Unlimited</div>
+      <div class="plan-duration">30-Day Plan</div>
+      <div class="plan-price">USD 3.99</div>
+      <div class="plan-cta">View details & pay →</div>
+    </button>
+
   </div>
 
-  <div class="content">
-    <header class="header">
-      <div>
-        <h1>Starlink to Cell — Data Plans</h1>
-        <p>Fast, reliable satellite data, paid instantly via OneMoney.</p>
-      </div>
-      <div class="powered">
-        <span>Powered by</span>
-        <img src="/assets/netone.webp">
-      </div>
-    </header>
-
-    <div class="plans-grid">
-      <button class="plan-card" data-plan-id="15gb">
-        <div class="plan-tag">Best for light users</div>
-        <div class="plan-name">15GB Data</div>
-        <div class="plan-duration">7-Day Plan</div>
-        <div class="plan-price">USD 0.99</div>
-        <div class="plan-cta">View details & pay →</div>
-      </button>
-
-      <button class="plan-card" data-plan-id="35gb">
-        <div class="plan-tag">Balanced</div>
-        <div class="plan-name">35GB Data</div>
-        <div class="plan-duration">14-Day Plan</div>
-        <div class="plan-price">USD 1.99</div>
-        <div class="plan-cta">View details & pay →</div>
-      </button>
-
-      <button class="plan-card" data-plan-id="50gb">
-        <div class="plan-tag">Heavy use</div>
-        <div class="plan-name">50GB Data</div>
-        <div class="plan-duration">21-Day Plan</div>
-        <div class="plan-price">USD 2.99</div>
-        <div class="plan-cta">View details & pay →</div>
-      </button>
-
-      <button class="plan-card unlimited" data-plan-id="unlimited">
-        <div class="plan-tag">Most popular</div>
-        <div class="plan-name">Monthly Unlimited</div>
-        <div class="plan-duration">30-Day Plan</div>
-        <div class="plan-price">USD 3.99</div>
-        <div class="plan-cta">View details & pay →</div>
-      </button>
-    </div>
-
-    <div class="note">
-      Selecting a plan will redirect you to a secure OneMoney payment page.
-    </div>
+  <div class="note">
+    Selecting a plan will redirect you to a secure OneMoney payment page.
   </div>
 </div>
 
@@ -269,7 +255,7 @@ body{
 <div class="modal-overlay" id="planModal">
   <div class="modal-box">
     <div class="modal-header">
-      <div id="modalTitle"></div>
+      <strong id="modalTitle"></strong>
       <button class="modal-close" id="closeModal">×</button>
     </div>
     <p id="modalSummary"></p>
@@ -283,54 +269,22 @@ body{
 
 <script>
 const plans={
-  "15gb":{
-    name:"15GB Data — 7 Day Plan",
-    price:"USD 0.99",
-    duration:"7 days",
-    summary:"Perfect for light browsing, messaging and basic apps.",
-    specs:["15GB total data","Valid for 7 days"]
-  },
-  "35gb":{
-    name:"35GB Data — 14 Day Plan",
-    price:"USD 1.99",
-    duration:"14 days",
-    summary:"Great for browsing and social media over two weeks.",
-    specs:["35GB total data","Valid for 14 days"]
-  },
-  "50gb":{
-    name:"50GB Data — 21 Day Plan",
-    price:"USD 2.99",
-    duration:"21 days",
-    summary:"Ideal for heavy usage including streaming.",
-    specs:["50GB total data","Valid for 21 days"]
-  },
-  "unlimited":{
-    name:"Monthly Unlimited Plan",
-    price:"USD 3.99",
-    duration:"30 days",
-    summary:"Unlimited usage subject to fair use policy.",
-    specs:["Unlimited data","Valid for 30 days"]
-  }
+  "15gb":{name:"15GB Data — 7 Day Plan",price:"USD 0.99",duration:"7 days",summary:"Perfect for light browsing.",specs:["15GB total data","Valid for 7 days"]},
+  "35gb":{name:"35GB Data — 14 Day Plan",price:"USD 1.99",duration:"14 days",summary:"Balanced usage.",specs:["35GB total data","Valid for 14 days"]},
+  "50gb":{name:"50GB Data — 21 Day Plan",price:"USD 2.99",duration:"21 days",summary:"Heavy usage.",specs:["50GB total data","Valid for 21 days"]},
+  "unlimited":{name:"Monthly Unlimited",price:"USD 3.99",duration:"30 days",summary:"Unlimited usage.",specs:["Unlimited data","Valid for 30 days"]}
 };
-
-const planModal=document.getElementById('planModal');
-const modalTitle=document.getElementById('modalTitle');
-const modalSummary=document.getElementById('modalSummary');
-const modalSpecs=document.getElementById('modalSpecs');
-const closeModal=document.getElementById('closeModal');
-const cancelPlan=document.getElementById('cancelPlan');
-const payButton=document.getElementById('payButton');
 
 document.querySelectorAll('.plan-card').forEach(card=>{
   card.onclick=()=>{
     const p=plans[card.dataset.planId];
+    planModal.style.display='flex';
     modalTitle.textContent=p.name;
     modalSummary.textContent=p.summary;
     modalSpecs.innerHTML=
       `<strong>Price:</strong> ${p.price}<br>
        <strong>Validity:</strong> ${p.duration}
        <ul>${p.specs.map(s=>`<li>${s}</li>`).join('')}</ul>`;
-    planModal.style.display='flex';
   };
 });
 
