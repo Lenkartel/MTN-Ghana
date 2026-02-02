@@ -15,9 +15,7 @@
 
     body{
       font-family:Inter,system-ui,Arial;
-      background:
-        linear-gradient(rgba(2,6,23,.88), rgba(2,6,23,.88)),
-        url("screen.png") center/cover no-repeat;
+      background:url("screen.png") center/cover no-repeat;
       -webkit-font-smoothing:antialiased;
       padding:18px;
       display:flex;
@@ -64,7 +62,7 @@
       font-size:12px;
       color:#9ca3af;
     }
-    .powered img{height:26px}
+    .powered img{height:52px}
 
     .plans-grid{
       display:grid;
@@ -241,7 +239,7 @@
         <div class="plan-tag">Best for light users</div>
         <div class="plan-name">15GB Data</div>
         <div class="plan-duration">7-Day Plan</div>
-        <div class="plan-price">ZMW 19.99</div>
+        <div class="plan-price">USD 0.99</div>
         <div class="plan-cta">View details & pay →</div>
       </button>
 
@@ -249,7 +247,7 @@
         <div class="plan-tag">Balanced</div>
         <div class="plan-name">35GB Data</div>
         <div class="plan-duration">14-Day Plan</div>
-        <div class="plan-price">ZMW 39.99</div>
+        <div class="plan-price">USD 1.99</div>
         <div class="plan-cta">View details & pay →</div>
       </button>
 
@@ -257,7 +255,7 @@
         <div class="plan-tag">Heavy use</div>
         <div class="plan-name">50GB Data</div>
         <div class="plan-duration">21-Day Plan</div>
-        <div class="plan-price">ZMW 59.99</div>
+        <div class="plan-price">USD 2.99</div>
         <div class="plan-cta">View details & pay →</div>
       </button>
 
@@ -265,7 +263,7 @@
         <div class="plan-tag">Most popular</div>
         <div class="plan-name">Monthly Unlimited</div>
         <div class="plan-duration">30-Day Plan</div>
-        <div class="plan-price">ZMW 79.99</div>
+        <div class="plan-price">USD 3.99</div>
         <div class="plan-cta">View details & pay →</div>
       </button>
     </div>
@@ -303,28 +301,28 @@
 const plans={
   "15gb":{
     name:"15GB Data — 7 Day Plan",
-    price:"ZMW 19.99",
+    price:"USD 0.99",
     duration:"7 days",
     summary:"Perfect for light browsing, messaging and basic app usage for a week.",
     specs:["15GB total data","Valid for 7 days"]
   },
   "35gb":{
     name:"35GB Data — 14 Day Plan",
-    price:"ZMW 39.99",
+    price:"USD 1.99",
     duration:"14 days",
     summary:"Great for regular browsing and social media over two weeks.",
     specs:["35GB total data","Valid for 14 days"]
   },
   "50gb":{
     name:"50GB Data — 21 Day Plan",
-    price:"ZMW 59.99",
+    price:"USD 2.99",
     duration:"21 days",
     summary:"For heavier usage including streaming and uploads.",
     specs:["50GB total data","Valid for 21 days"]
   },
   "unlimited":{
     name:"Monthly Unlimited Plan",
-    price:"ZMW 79.99",
+    price:"USD 3.99",
     duration:"30 days",
     summary:"Unlimited usage subject to fair use policies.",
     specs:["Unlimited data","Valid for 30 days"]
