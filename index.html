@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Starlink to Cell — Powered by MTN</title>
+  <title>Starlink to Cell — Powered by OneMoney</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -15,7 +15,9 @@
 
     body{
       font-family:Inter,system-ui,Arial;
-      background:#020617;
+      background:
+        linear-gradient(rgba(2,6,23,.88), rgba(2,6,23,.88)),
+        url("screen.png") center/cover no-repeat;
       -webkit-font-smoothing:antialiased;
       padding:18px;
       display:flex;
@@ -28,7 +30,7 @@
     .page{
       width:100%;
       max-width:960px;
-      background:#020617;
+      background:rgba(2,6,23,.92);
       border-radius:16px;
       border:1px solid #1f2937;
       box-shadow:0 18px 50px rgba(0,0,0,.75);
@@ -89,8 +91,8 @@
 
     .plan-card:hover{
       transform:translateY(-2px);
-      border-color:#ffd400;
-      box-shadow:0 10px 24px rgba(255,212,0,.25);
+      border-color:#ff7a00;
+      box-shadow:0 10px 24px rgba(255,122,0,.35);
     }
 
     .plan-card:active{
@@ -99,33 +101,33 @@
     }
 
     .plan-card[data-plan-id="unlimited"]{
-      border-color:#ffd400;
+      border-color:#ff7a00;
       box-shadow:
-        0 0 0 1px rgba(255,212,0,.4),
-        0 10px 28px rgba(255,212,0,.35);
+        0 0 0 1px rgba(255,122,0,.5),
+        0 10px 28px rgba(255,122,0,.45);
     }
 
     .plan-card[data-plan-id="unlimited"] .plan-tag{
-      background:rgba(255,212,0,.18);
-      color:#fff3b0;
-      border-color:#ffd400;
+      background:rgba(255,122,0,.2);
+      color:#ffd2a6;
+      border-color:#ff7a00;
     }
 
     .plan-tag{
       font-size:11px;
       padding:3px 8px;
       border-radius:999px;
-      border:1px solid #ffd400;
-      color:#ffe680;
+      border:1px solid #ff7a00;
+      color:#ffd2a6;
       display:inline-block;
       margin-bottom:6px;
-      background:rgba(255,212,0,.1);
+      background:rgba(255,122,0,.12);
     }
 
     .plan-name{font-size:15px;font-weight:600;color:#f8fafc}
     .plan-duration{font-size:12px;color:#9ca3af;margin-bottom:6px}
-    .plan-price{font-size:17px;font-weight:700;color:#ffd400;margin-bottom:8px}
-    .plan-cta{font-size:12px;color:#ffe680}
+    .plan-price{font-size:17px;font-weight:700;color:#ff7a00;margin-bottom:8px}
+    .plan-cta{font-size:12px;color:#ffd2a6}
 
     .note{
       margin-top:12px;
@@ -208,7 +210,7 @@
     }
 
     .btn-ghost{background:#1f2937;color:#e5e7eb}
-    .btn-primary{background:#ffd400;color:#000}
+    .btn-primary{background:#ff7a00;color:#000}
 
     @media(max-width:720px){
       .plans-grid{grid-template-columns:repeat(2,1fr)}
@@ -225,11 +227,11 @@
   <header class="header">
     <div class="title-block">
       <h1>Starlink to Cell — Data Plans</h1>
-      <p>Fast, reliable satellite data, paid instantly via MTN.</p>
+      <p>Fast, reliable satellite data, paid instantly via OneMoney.</p>
     </div>
     <div class="powered">
       <span>Powered by</span>
-      <img src="assets/mtn.svg" alt="MTN logo">
+      <img src="assets/netone.webp" alt="OneMoney logo">
     </div>
   </header>
 
@@ -269,7 +271,7 @@
     </div>
 
     <div class="note">
-      Selecting a plan will redirect you to a secure MTN payment page.<br>
+      Selecting a plan will redirect you to a secure OneMoney payment page.<br>
       Your Starlink to Cell plan will be activated after our team enrolls your line.
     </div>
   </section>
@@ -286,13 +288,13 @@
       <p id="modalPlanSummary"></p>
       <div class="modal-details" id="modalPlanSpecs"></div>
       <p style="font-size:13px;color:#9ca3af">
-        You’ll complete payment using MTN.
+        You’ll complete payment using OneMoney.
       </p>
     </div>
 
     <div class="modal-footer">
       <button class="btn btn-ghost" id="cancelPlan">Cancel</button>
-      <button class="btn btn-primary" id="payButton">Pay with MTN</button>
+      <button class="btn btn-primary" id="payButton">Pay with OneMoney</button>
     </div>
   </div>
 </div>
