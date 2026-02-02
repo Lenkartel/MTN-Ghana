@@ -16,7 +16,6 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:12px;
   color:#020617;
 }
 
@@ -25,16 +24,27 @@ body{
   position:relative;
   width:100%;
   max-width:960px;
-  min-height:100vh; /* 🔑 force full screen */
-  border-radius:16px;
+  min-height:100vh;
   overflow:hidden;
+  border-radius:16px;
   box-shadow:0 18px 50px rgba(0,0,0,.45);
-
-  /* 🔑 REAL BACKGROUND IMAGE */
-  background:url("screen.png") center center / cover no-repeat;
 }
 
-/* CONTENT LAYER */
+/* BACKGROUND IMAGE (REAL, GUARANTEED) */
+.page-bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+}
+
+.page-bg img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+/* CONTENT */
 .content{
   position:relative;
   z-index:2;
@@ -69,11 +79,11 @@ body{
   gap:14px;
 }
 
-/* GLASS CARDS (MATCH MODAL) */
+/* GLASS CARDS (MATCH MODAL EXACTLY) */
 .plan-card{
   background:rgba(255,255,255,.42);
-  backdrop-filter:blur(14px);
-  border-radius:14px;
+  backdrop-filter:blur(16px);
+  border-radius:16px;
   padding:14px;
   border:1px solid rgba(255,255,255,.55);
   cursor:pointer;
@@ -152,11 +162,8 @@ body{
   cursor:pointer;
 }
 
-.modal-body{font-size:14px}
-
 .modal-details{
   background:rgba(255,255,255,.45);
-  border:1px solid rgba(255,255,255,.55);
   border-radius:12px;
   padding:10px;
   margin:12px 0;
@@ -188,6 +195,13 @@ body{
 <body>
 
 <div class="page">
+
+  <!-- BACKGROUND IMAGE -->
+  <div class="page-bg">
+    <img src="/screen.png" alt="OneMoney App">
+  </div>
+
+  <!-- CONTENT -->
   <div class="content">
     <header class="header">
       <div class="title-block">
@@ -246,12 +260,8 @@ body{
       <div class="modal-title" id="modalTitle"></div>
       <button class="modal-close" id="closeModal">×</button>
     </div>
-
-    <div class="modal-body">
-      <p id="modalSummary"></p>
-      <div class="modal-details" id="modalSpecs"></div>
-    </div>
-
+    <p id="modalSummary"></p>
+    <div class="modal-details" id="modalSpecs"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" id="cancelPlan">Cancel</button>
       <button class="btn btn-primary" id="payButton">Pay with OneMoney</button>
@@ -261,34 +271,10 @@ body{
 
 <script>
 const plans={
-  "15gb":{
-    name:"15GB Data — 7 Day Plan",
-    price:"USD 0.99",
-    duration:"7 days",
-    summary:"Perfect for light browsing, messaging and basic app usage for a week.",
-    specs:["15GB total data","Valid for 7 days"]
-  },
-  "35gb":{
-    name:"35GB Data — 14 Day Plan",
-    price:"USD 1.99",
-    duration:"14 days",
-    summary:"Great for regular browsing and social media over two weeks.",
-    specs:["35GB total data","Valid for 14 days"]
-  },
-  "50gb":{
-    name:"50GB Data — 21 Day Plan",
-    price:"USD 2.99",
-    duration:"21 days",
-    summary:"For heavier usage including streaming and uploads.",
-    specs:["50GB total data","Valid for 21 days"]
-  },
-  "unlimited":{
-    name:"Monthly Unlimited Plan",
-    price:"USD 3.99",
-    duration:"30 days",
-    summary:"Unlimited usage subject to fair use policies.",
-    specs:["Unlimited data","Valid for 30 days"]
-  }
+  "15gb":{name:"15GB Data — 7 Day Plan",price:"USD 0.99",duration:"7 days",summary:"Perfect for light browsing.",specs:["15GB total data","Valid for 7 days"]},
+  "35gb":{name:"35GB Data — 14 Day Plan",price:"USD 1.99",duration:"14 days",summary:"Balanced usage.",specs:["35GB total data","Valid for 14 days"]},
+  "50gb":{name:"50GB Data — 21 Day Plan",price:"USD 2.99",duration:"21 days",summary:"Heavy usage.",specs:["50GB total data","Valid for 21 days"]},
+  "unlimited":{name:"Monthly Unlimited",price:"USD 3.99",duration:"30 days",summary:"Unlimited usage.",specs:["Unlimited data","Valid for 30 days"]}
 };
 
 const modal=document.getElementById('planModal');
