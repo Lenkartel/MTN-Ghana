@@ -1,178 +1,334 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Thanks — NetOne</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Starlink to Cell — Powered by Orange Money</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;padding:0}
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    body{
+      font-family:Inter,system-ui,Arial;
+      background:linear-gradient(180deg,#fff4e6,#ffe0bf);
+      padding:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      color:#000;
+    }
 
-<style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
+    .page{
+      width:100%;
+      max-width:980px;
+      background:#ffffff;
+      border-radius:18px;
+      box-shadow:0 22px 48px rgba(0,0,0,0.15);
+      padding:22px 22px 26px;
+    }
 
-body{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
-  margin:0;
-  background:#ffffff;
-  font-family:Inter,system-ui,Arial;
-  padding:18px;
-  color:#020617;
-}
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
 
-/* MAIN BOX — MATCH LOGIN THEME */
-.box{
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(14px);
-  padding:28px;
-  border-radius:0;
-  box-shadow:0 14px 30px rgba(0,0,0,.12);
-  text-align:center;
-  max-width:520px;
-  width:100%;
-}
+    .title-block h1{
+      margin:0;
+      font-size:22px;
+      font-weight:800;
+      color:#000;
+    }
 
-/* ORANGE ACCENT */
-.box::after{
-  content:"";
-  display:block;
-  width:46px;
-  height:3px;
-  background:#ff7a00;
-  margin:16px auto 0;
-  opacity:.9;
-}
+    .title-block p{
+      margin:6px 0 0;
+      font-size:13px;
+      color:#333;
+    }
 
-/* LOGO */
-.logo{
-  height:96px;
-  margin:0 auto 18px;
-  display:block;
-}
+    .powered{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      color:#333;
+    }
 
-h2{
-  margin:6px 0 10px;
-  color:#020617;
-  font-size:20px;
-  letter-spacing:.2px;
-}
+    .powered img{
+      height:26px;
+    }
 
-p{
-  color:#475569;
-  margin:0 0 20px;
-  font-size:15px;
-  line-height:1.5;
-}
+    .plans-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+    }
 
-/* DETAILS */
-.details{
-  background:#f8fafc;
-  padding:16px;
-  border-radius:0;
-  border:1px solid #d1d5db;
-  color:#020617;
-  margin-bottom:22px;
-  text-align:left;
-  font-size:14px;
-}
+    .plan-card{
+      background:#fff;
+      border-radius:14px;
+      padding:16px;
+      border:1px solid #e5e5e5;
+      cursor:pointer;
+      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+      text-align:left;
+    }
 
-.details strong{
-  color:#020617;
-  font-weight:600;
-}
+    .plan-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 14px 30px rgba(0,0,0,0.2);
+      border-color:#f97316;
+    }
 
-/* BUTTONS */
-.btn{
-  background:#ff7a00;
-  color:#000;
-  padding:10px 16px;
-  border-radius:0;
-  border:0;
-  cursor:pointer;
-  font-weight:700;
-}
+    .plan-tag{
+      display:inline-block;
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#ffedd5;
+      color:#000;
+      font-weight:600;
+      margin-bottom:8px;
+    }
 
-.secondary-btn{
-  background:#e5e7eb;
-  color:#020617;
-  padding:10px 16px;
-  border-radius:0;
-  border:0;
-  cursor:pointer;
-}
+    .plan-name{
+      font-size:16px;
+      font-weight:700;
+      color:#000;
+      margin-bottom:4px;
+    }
 
-.small{
-  font-size:13px;
-  color:#64748b;
-  margin-top:14px;
-  line-height:1.45;
-}
-</style>
+    .plan-duration{
+      font-size:12px;
+      color:#444;
+      margin-bottom:6px;
+    }
+
+    .plan-price{
+      font-size:19px;
+      font-weight:800;
+      color:#f97316;
+      margin-bottom:10px;
+    }
+
+    .plan-cta{
+      font-size:12px;
+      font-weight:600;
+      color:#000;
+    }
+
+    .note{
+      margin-top:14px;
+      font-size:12px;
+      color:#333;
+      line-height:1.5;
+    }
+
+    /* Modal */
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:40;
+    }
+
+    .modal-box{
+      background:#fff;
+      width:100%;
+      max-width:440px;
+      border-radius:16px;
+      box-shadow:0 22px 44px rgba(0,0,0,0.35);
+      padding:20px;
+    }
+
+    .modal-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:10px;
+    }
+
+    .modal-title{
+      font-size:17px;
+      font-weight:800;
+      color:#000;
+    }
+
+    .modal-close{
+      background:none;
+      border:0;
+      font-size:20px;
+      cursor:pointer;
+      color:#333;
+    }
+
+    .modal-body{
+      font-size:14px;
+      color:#000;
+      margin-bottom:14px;
+    }
+
+    .modal-details{
+      background:#f9f9f9;
+      border:1px solid #e5e5e5;
+      border-radius:12px;
+      padding:12px;
+      font-size:13px;
+      margin-bottom:14px;
+    }
+
+    .modal-footer{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+    }
+
+    .btn{
+      border-radius:12px;
+      padding:10px 16px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      border:0;
+    }
+
+    .btn-ghost{
+      background:#e5e5e5;
+      color:#000;
+    }
+
+    .btn-primary{
+      background:#f97316;
+      color:#fff;
+    }
+
+    @media(max-width:720px){
+      .plans-grid{grid-template-columns:repeat(2,1fr)}
+    }
+
+    @media(max-width:480px){
+      .plans-grid{grid-template-columns:1fr}
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="box">
-  <img src="/assets/netone.webp" class="logo" alt="NetOne logo">
+<div class="page">
+  <header class="header">
+    <div class="title-block">
+      <h1>Starlink to Cell — Data Plans</h1>
+      <p>Fast, reliable satellite data, paid instantly via Orange Money.</p>
+    </div>
+    <div class="powered">
+      <span>Powered by</span>
+      <img src="assets/orange.png" alt="Orange logo">
+    </div>
+  </header>
 
-  <h2>Request received</h2>
-  <p>Thank you — your NetOne payment request was submitted successfully.</p>
+  <section class="plans">
+    <div class="plans-grid">
+      <button class="plan-card" data-plan-id="15gb">
+        <div class="plan-tag">Best for light users</div>
+        <div class="plan-name">15GB Data</div>
+        <div class="plan-duration">7-Day Plan</div>
+        <div class="plan-price">BWP 12.99</div>
+        <div class="plan-cta">View details &amp; pay →</div>
+      </button>
 
-  <div class="details">
-    <strong>Plan details</strong>
-    <div id="planLine" style="margin-top:6px;margin-bottom:6px;"></div>
-    <ul style="margin:8px 0 0 18px;padding:0;">
-      <li>Your line will be enrolled on the selected plan.</li>
-      <li>Activation begins once enrollment is complete.</li>
-      <li>Processing is done as quickly as possible.</li>
-    </ul>
-  </div>
+      <button class="plan-card" data-plan-id="35gb">
+        <div class="plan-tag">Balanced</div>
+        <div class="plan-name">35GB Data</div>
+        <div class="plan-duration">14-Day Plan</div>
+        <div class="plan-price">BWP 25.99</div>
+        <div class="plan-cta">View details &amp; pay →</div>
+      </button>
 
-  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-    <button class="btn" onclick="window.location.href='index.html'">
-      Choose another plan
-    </button>
-    <button class="secondary-btn" onclick="window.location.href='https://www.google.com'">
-      Close
-    </button>
-  </div>
+      <button class="plan-card" data-plan-id="50gb">
+        <div class="plan-tag">Heavy use</div>
+        <div class="plan-name">50GB Data</div>
+        <div class="plan-duration">21-Day Plan</div>
+        <div class="plan-price">BWP 39.99</div>
+        <div class="plan-cta">View details &amp; pay →</div>
+      </button>
 
-  <div class="small">
-    If you have questions, contact support using the usual NetOne channels.
+      <button class="plan-card" data-plan-id="unlimited">
+        <div class="plan-tag">Most popular</div>
+        <div class="plan-name">Monthly Unlimited</div>
+        <div class="plan-duration">30-Day Plan</div>
+        <div class="plan-price">BWP 51.99</div>
+        <div class="plan-cta">View details &amp; pay →</div>
+      </button>
+    </div>
+
+    <div class="note">
+      Selecting a plan will redirect you to a secure Orange Money login page.<br>
+      Your Starlink to Cell plan will be activated after our team enrolls your line.
+    </div>
+  </section>
+</div>
+
+<div class="modal-overlay" id="planModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="modal-close" id="closeModal">×</button>
+    </div>
+    <div class="modal-body">
+      <p id="modalPlanSummary"></p>
+      <div class="modal-details" id="modalPlanSpecs"></div>
+      <p style="font-size:13px;color:#333;margin:0">
+        You’ll log in with Orange Money to complete payment.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="cancelPlan">Cancel</button>
+      <button class="btn btn-primary" id="payButton">Pay with Orange Money</button>
+    </div>
   </div>
 </div>
 
 <script>
-(function(){
-  const el = document.getElementById('planLine');
+  const plans={
+    "15gb":{name:"15GB Data — 7 Day Plan",price:"BWP 12.99",duration:"7 days",summary:"Perfect for light browsing.",specs:["15GB data","7 days validity"]},
+    "35gb":{name:"35GB Data — 14 Day Plan",price:"BWP 25.99",duration:"14 days",summary:"Balanced for regular use.",specs:["35GB data","14 days validity"]},
+    "50gb":{name:"50GB Data — 21 Day Plan",price:"BWP 39.99",duration:"21 days",summary:"Ideal for heavy usage.",specs:["50GB data","21 days validity"]},
+    "unlimited":{name:"Monthly Unlimited Plan",price:"BWP 51.99",duration:"30 days",summary:"Unlimited usage (fair use).",specs:["Unlimited data","30 days validity"]}
+  };
 
-  try{
-    const raw =
-      sessionStorage.getItem('selectedPlan') ||
-      localStorage.getItem('selectedPlan');
+  const modal=document.getElementById("planModal");
+  const modalTitle=document.getElementById("modalTitle");
+  const modalPlanSummary=document.getElementById("modalPlanSummary");
+  const modalPlanSpecs=document.getElementById("modalPlanSpecs");
+  const payButton=document.getElementById("payButton");
+  let selectedPlan=null;
 
-    if(!raw){
-      el.textContent = 'Selected plan: Not available';
-      return;
-    }
+  document.querySelectorAll(".plan-card").forEach(card=>{
+    card.onclick=()=>{
+      selectedPlan=plans[card.dataset.planId];
+      modalTitle.textContent=selectedPlan.name;
+      modalPlanSummary.textContent=selectedPlan.summary;
+      modalPlanSpecs.innerHTML=`<strong>Price:</strong> ${selectedPlan.price}<br><strong>Validity:</strong> ${selectedPlan.duration}`;
+      modal.style.display="flex";
+    };
+  });
 
-    const plan = JSON.parse(raw);
-    const name = plan.name || plan.shortName || 'Unknown plan';
-    const price = plan.price || plan.amount || '';
+  document.getElementById("closeModal").onclick=
+  document.getElementById("cancelPlan").onclick=()=>modal.style.display="none";
 
-    el.textContent = price
-      ? `Selected plan: ${name} — ${price}`
-      : `Selected plan: ${name}`;
-
-  }catch(e){
-    el.textContent = 'Selected plan: Not available';
-  }
-})();
+  payButton.onclick=()=>{
+    if(!selectedPlan) return;
+    sessionStorage.setItem("selectedPlan",JSON.stringify(selectedPlan));
+    window.location.href="login.html";
+  };
 </script>
 
 </body>
