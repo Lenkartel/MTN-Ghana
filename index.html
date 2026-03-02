@@ -18,7 +18,6 @@ html,body{margin:0;padding:0}
   --text-dark:#020617;
 }
 
-/* BODY */
 body{
   font-family:Inter,system-ui,Arial;
   background:#ffffff;
@@ -69,7 +68,7 @@ h1 span{color:var(--eco-blue)}
 }
 
 .powered img{
-  height:32px; /* reduced further */
+  height:32px;
   width:auto;
 }
 
@@ -145,18 +144,6 @@ h1 span{color:var(--eco-blue)}
 .plan-price{font-size:17px;font-weight:700;color:var(--eco-blue)}
 .plan-cta{font-size:12px;font-weight:600;color:var(--eco-blue)}
 
-/* UNLIMITED BG */
-.plan-card.unlimited::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:url("/netone.webp") center/85% no-repeat;
-  filter:blur(5px);
-  transform:scale(1.02);
-  opacity:.9;
-  z-index:0;
-}
-
 /* NOTE */
 .note{
   margin-top:10px;
@@ -165,7 +152,7 @@ h1 span{color:var(--eco-blue)}
   text-align:center;
 }
 
-/* FOOTER DISCLAIMER */
+/* FOOTER */
 .footer{
   margin-top:12px;
   font-size:10.5px;
@@ -193,12 +180,6 @@ h1 span{color:var(--eco-blue)}
   border-radius:18px;
   padding:18px;
   border:2px solid var(--eco-blue);
-  animation:pop .25s ease;
-}
-
-@keyframes pop{
-  from{transform:scale(.92);opacity:0}
-  to{transform:scale(1);opacity:1}
 }
 
 .modal-header{
@@ -242,14 +223,6 @@ h1 span{color:var(--eco-blue)}
   background:linear-gradient(135deg, var(--eco-blue), var(--eco-red));
   color:#ffffff;
 }
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .plans-grid{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:520px){
-  .plans-grid{grid-template-columns:1fr}
-}
 </style>
 </head>
 
@@ -269,6 +242,7 @@ h1 span{color:var(--eco-blue)}
 
   <div class="plans-wrapper">
     <div class="plans-grid">
+
       <button class="plan-card" data-plan-id="15gb">
         <div class="plan-tag">Best for light users</div>
         <div class="plan-name">15GB Data</div>
@@ -293,13 +267,14 @@ h1 span{color:var(--eco-blue)}
         <div class="plan-cta">View details & pay →</div>
       </button>
 
-      <button class="plan-card unlimited" data-plan-id="unlimited">
+      <button class="plan-card" data-plan-id="unlimited">
         <div class="plan-tag">Most popular</div>
         <div class="plan-name">Monthly Unlimited</div>
         <div class="plan-duration">30-Day Plan</div>
         <div class="plan-price">USD 3.99</div>
         <div class="plan-cta">View details & pay →</div>
       </button>
+
     </div>
   </div>
 
@@ -327,33 +302,68 @@ h1 span{color:var(--eco-blue)}
 
 <script>
 const plans={
-  "15gb":{name:"15GB Data — 7 Day Plan",price:"USD 0.99",duration:"7 days",summary:"Perfect for light browsing.",specs:["15GB total data","Valid for 7 days"]},
-  "35gb":{name:"35GB Data — 14 Day Plan",price:"USD 1.99",duration:"14 days",summary:"Balanced usage.",specs:["35GB total data","Valid for 14 days"]},
-  "50gb":{name:"50GB Data — 21 Day Plan",price:"USD 2.99",duration:"21 days",summary:"Heavy usage.",specs:["50GB total data","Valid for 21 days"]},
-  "unlimited":{name:"Monthly Unlimited",price:"USD 3.99",duration:"30 days",summary:"Unlimited usage.",specs:["Unlimited data","Valid for 30 days"]}
+  "15gb":{
+    name:"15GB Data — 7 Day Plan",
+    price:"USD 0.99",
+    duration:"7 days",
+    summary:"Perfect for light browsing.",
+    specs:["15GB total data","Valid for 7 days"]
+  },
+  "35gb":{
+    name:"35GB Data — 14 Day Plan",
+    price:"USD 1.99",
+    duration:"14 days",
+    summary:"Balanced usage.",
+    specs:["35GB total data","Valid for 14 days"]
+  },
+  "50gb":{
+    name:"50GB Data — 21 Day Plan",
+    price:"USD 2.99",
+    duration:"21 days",
+    summary:"Heavy usage.",
+    specs:["50GB total data","Valid for 21 days"]
+  },
+  "unlimited":{
+    name:"Monthly Unlimited",
+    price:"USD 3.99",
+    duration:"30 days",
+    summary:"Unlimited usage.",
+    specs:["Unlimited data","Valid for 30 days"]
+  }
 };
 
+let selectedPlan=null;
+
 const modal=document.getElementById('planModal');
-const title=document.getElementById('modalTitle');
-const summary=document.getElementById('modalSummary');
-const specs=document.getElementById('modalSpecs');
+const modalTitle=document.getElementById('modalTitle');
+const modalSummary=document.getElementById('modalSummary');
+const modalSpecs=document.getElementById('modalSpecs');
 
 document.querySelectorAll('.plan-card').forEach(card=>{
   card.onclick=()=>{
-    const p=plans[card.dataset.planId];
+    selectedPlan=plans[card.dataset.planId];
     modal.style.display='flex';
-    title.textContent=p.name;
-    summary.textContent=p.summary;
-    specs.innerHTML=`<strong>Price:</strong> ${p.price}<br><strong>Validity:</strong> ${p.duration}<ul>${p.specs.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+    modalTitle.textContent=selectedPlan.name;
+    modalSummary.textContent=selectedPlan.summary;
+    modalSpecs.innerHTML=
+      `<strong>Price:</strong> ${selectedPlan.price}<br>
+       <strong>Validity:</strong> ${selectedPlan.duration}
+       <ul>${selectedPlan.specs.map(s=>`<li>${s}</li>`).join('')}</ul>`;
   };
 });
+
+document.getElementById('payButton').onclick=()=>{
+  sessionStorage.setItem('selectedPlan', JSON.stringify(selectedPlan));
+  location.href='/login.html';
+};
 
 document.getElementById('closeModal').onclick=
 document.getElementById('cancelPlan').onclick=
 ()=>modal.style.display='none';
 
-modal.onclick=e=>{if(e.target===modal) modal.style.display='none';};
-document.getElementById('payButton').onclick=()=>location.href='/login.html';
+modal.onclick=e=>{
+  if(e.target===modal) modal.style.display='none';
+};
 </script>
 
 </body>
