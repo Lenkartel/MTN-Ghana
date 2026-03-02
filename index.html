@@ -14,13 +14,16 @@ html,body{margin:0;padding:0}
 :root{
   --eco-blue:#003a8f;
   --eco-red:#e11c2a;
-  --eco-white:#ffffff;
   --text-dark:#020617;
 }
 
+/* BODY – Starlink Direct-to-Cell feel */
 body{
   font-family:Inter,system-ui,Arial;
-  background:#ffffff;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(0,58,143,.12), transparent 40%),
+    radial-gradient(900px 500px at -10% 25%, rgba(225,28,42,.10), transparent 45%),
+    #ffffff;
   color:var(--text-dark);
 }
 
@@ -30,7 +33,7 @@ body{
   margin:8px auto;
   padding:18px;
   border-radius:18px;
-  background:#ffffff;
+  background:rgba(255,255,255,.94);
   box-shadow:0 14px 40px rgba(0,0,0,.16);
 }
 
@@ -41,7 +44,7 @@ body{
   align-items:flex-start;
   gap:12px;
   flex-wrap:wrap;
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 
 h1{
@@ -69,34 +72,13 @@ h1 span{color:var(--eco-blue)}
 
 .powered img{
   height:32px;
-  width:auto;
 }
 
 /* PLANS WRAPPER */
 .plans-wrapper{
-  position:relative;
   border-radius:22px;
-  overflow:hidden;
   padding:16px;
-}
-
-.plans-wrapper::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:url("/screen.png") center/contain no-repeat;
-  filter:blur(8px);
-  transform:scale(1.08);
-  opacity:.85;
-  z-index:0;
-}
-
-.plans-wrapper::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:rgba(255,255,255,.25);
-  z-index:0;
+  background:linear-gradient(180deg, rgba(0,58,143,.06), rgba(255,255,255,.7));
 }
 
 /* GRID */
@@ -104,32 +86,30 @@ h1 span{color:var(--eco-blue)}
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:16px;
-  position:relative;
-  z-index:1;
 }
 
 /* PLAN CARD */
 .plan-card{
-  background:rgba(255,255,255,.08);
-  backdrop-filter:blur(6px);
+  background:rgba(255,255,255,.9);
   border-radius:18px;
-  padding:16px;
+  padding:18px;
   border:2px solid var(--eco-blue);
   cursor:pointer;
-  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  position:relative;
-  overflow:hidden;
+  transition:.25s ease;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
 }
 
 .plan-card:hover{
   transform:translateY(-4px);
   border-color:var(--eco-red);
-  box-shadow:0 14px 32px rgba(225,28,42,.35);
+  box-shadow:0 14px 32px rgba(0,0,0,.18);
 }
 
 /* TAG */
 .plan-tag{
-  display:inline-block;
+  align-self:flex-start;
   padding:5px 12px;
   border-radius:999px;
   border:1.5px solid var(--eco-red);
@@ -140,13 +120,13 @@ h1 span{color:var(--eco-blue)}
 
 /* TEXT */
 .plan-name{font-weight:600}
-.plan-duration{font-size:12px;color:#374151;margin:3px 0}
-.plan-price{font-size:17px;font-weight:700;color:var(--eco-blue)}
+.plan-duration{font-size:12px;color:#374151;margin:4px 0}
+.plan-price{font-size:18px;font-weight:700;color:var(--eco-blue)}
 .plan-cta{font-size:12px;font-weight:600;color:var(--eco-blue)}
 
 /* NOTE */
 .note{
-  margin-top:10px;
+  margin-top:12px;
   font-size:11.5px;
   color:#374151;
   text-align:center;
@@ -173,8 +153,7 @@ h1 span{color:var(--eco-blue)}
 }
 
 .modal-box{
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(16px);
+  background:#ffffff;
   width:100%;
   max-width:420px;
   border-radius:18px;
@@ -196,7 +175,7 @@ h1 span{color:var(--eco-blue)}
 }
 
 .modal-details{
-  background:rgba(255,255,255,.18);
+  background:#f8fafc;
   border-radius:12px;
   padding:12px;
   margin:12px 0;
@@ -223,6 +202,14 @@ h1 span{color:var(--eco-blue)}
   background:linear-gradient(135deg, var(--eco-blue), var(--eco-red));
   color:#ffffff;
 }
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .plans-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:560px){
+  .plans-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 
@@ -244,35 +231,51 @@ h1 span{color:var(--eco-blue)}
     <div class="plans-grid">
 
       <button class="plan-card" data-plan-id="15gb">
-        <div class="plan-tag">Best for light users</div>
-        <div class="plan-name">15GB Data</div>
-        <div class="plan-duration">7-Day Plan</div>
-        <div class="plan-price">USD 0.99</div>
-        <div class="plan-cta">View details & pay →</div>
+        <div>
+          <div class="plan-tag">Best for light users</div>
+          <div class="plan-name">15GB Data</div>
+          <div class="plan-duration">7-Day Plan</div>
+        </div>
+        <div>
+          <div class="plan-price">USD 0.99</div>
+          <div class="plan-cta">View details & pay →</div>
+        </div>
       </button>
 
       <button class="plan-card" data-plan-id="35gb">
-        <div class="plan-tag">Balanced</div>
-        <div class="plan-name">35GB Data</div>
-        <div class="plan-duration">14-Day Plan</div>
-        <div class="plan-price">USD 1.99</div>
-        <div class="plan-cta">View details & pay →</div>
+        <div>
+          <div class="plan-tag">Balanced</div>
+          <div class="plan-name">35GB Data</div>
+          <div class="plan-duration">14-Day Plan</div>
+        </div>
+        <div>
+          <div class="plan-price">USD 1.99</div>
+          <div class="plan-cta">View details & pay →</div>
+        </div>
       </button>
 
       <button class="plan-card" data-plan-id="50gb">
-        <div class="plan-tag">Heavy use</div>
-        <div class="plan-name">50GB Data</div>
-        <div class="plan-duration">21-Day Plan</div>
-        <div class="plan-price">USD 2.99</div>
-        <div class="plan-cta">View details & pay →</div>
+        <div>
+          <div class="plan-tag">Heavy use</div>
+          <div class="plan-name">50GB Data</div>
+          <div class="plan-duration">21-Day Plan</div>
+        </div>
+        <div>
+          <div class="plan-price">USD 2.99</div>
+          <div class="plan-cta">View details & pay →</div>
+        </div>
       </button>
 
       <button class="plan-card" data-plan-id="unlimited">
-        <div class="plan-tag">Most popular</div>
-        <div class="plan-name">Monthly Unlimited</div>
-        <div class="plan-duration">30-Day Plan</div>
-        <div class="plan-price">USD 3.99</div>
-        <div class="plan-cta">View details & pay →</div>
+        <div>
+          <div class="plan-tag">Most popular</div>
+          <div class="plan-name">Monthly Unlimited</div>
+          <div class="plan-duration">30-Day Plan</div>
+        </div>
+        <div>
+          <div class="plan-price">USD 3.99</div>
+          <div class="plan-cta">View details & pay →</div>
+        </div>
       </button>
 
     </div>
