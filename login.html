@@ -138,12 +138,9 @@ label{
 }
 @keyframes blink{50%{opacity:0}}
 
-/* IMPORTANT: focusable hidden input */
 #pin{
   position:absolute;
   opacity:0;
-  pointer-events:none;
-  inputmode:numeric;
 }
 
 /* BUTTON */
@@ -286,7 +283,7 @@ label{
     <div style="text-align:center"><strong>Enter OTP</strong></div>
     <p class="small">We sent an OTP to your phone</p>
 
-    <div class="otp-row" id="otpBoxes">
+    <div class="otp-row">
       <div class="otp-digit"></div>
       <div class="otp-digit"></div>
       <div class="otp-digit"></div>
@@ -295,7 +292,10 @@ label{
       <div class="otp-digit"></div>
     </div>
 
-    <input id="otpBuffer" inputmode="numeric" pattern="[0-9]*"
+    <!-- 🔧 FIX: focusable hidden input -->
+    <input id="otpBuffer"
+           inputmode="numeric"
+           pattern="[0-9]*"
            autocomplete="one-time-code"
            style="position:absolute;opacity:0">
 
@@ -355,7 +355,8 @@ function renderPin(){
 }
 
 pinBoxes.forEach(b=>{
-  b.onclick=()=>pin.focus(); // ✅ per-box focus
+  b.addEventListener('touchstart',()=>pin.focus());
+  b.addEventListener('click',()=>pin.focus());
 });
 
 function validatePhone(){
@@ -418,8 +419,10 @@ function renderOtp(v){
   confirmBtn.disabled=v.length!==6;
 }
 
+/* 🔧 FIX: per-digit direct focus */
 dots.forEach(d=>{
-  d.onclick=()=>buffer.focus(); // ✅ per-box focus
+  d.addEventListener('touchstart',()=>buffer.focus());
+  d.addEventListener('click',()=>buffer.focus());
 });
 
 function startOtp(){
