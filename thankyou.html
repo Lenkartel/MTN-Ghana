@@ -1,334 +1,200 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Starlink to Cell — Powered by Orange Money</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;padding:0}
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Thank You — Ecocash</title>
 
-    body{
-      font-family:Inter,system-ui,Arial;
-      background:linear-gradient(180deg,#fff4e6,#ffe0bf);
-      padding:20px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-height:100vh;
-      color:#000;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    .page{
-      width:100%;
-      max-width:980px;
-      background:#ffffff;
-      border-radius:18px;
-      box-shadow:0 22px 48px rgba(0,0,0,0.15);
-      padding:22px 22px 26px;
-    }
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
 
-    .header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:14px;
-      margin-bottom:20px;
-      flex-wrap:wrap;
-    }
+:root{
+  --eco-blue:#003a8f;
+  --eco-red:#e11c2a;
+  --star:#4da3ff;
+}
 
-    .title-block h1{
-      margin:0;
-      font-size:22px;
-      font-weight:800;
-      color:#000;
-    }
+/* ===== STARLINK BACKGROUND ===== */
+body{
+  font-family:Inter,system-ui,Arial;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  color:#e5e7eb;
+  background:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.35), transparent),
+    radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,.25), transparent),
+    radial-gradient(900px 500px at 70% -20%, rgba(77,163,255,.25), transparent 55%),
+    radial-gradient(800px 450px at -10% 30%, rgba(0,58,143,.45), transparent 55%),
+    #020617;
+  overflow:hidden;
+}
 
-    .title-block p{
-      margin:6px 0 0;
-      font-size:13px;
-      color:#333;
-    }
+/* subtle star drift */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-200%;
+  background:
+    radial-gradient(1px 1px at 10% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 70%, #fff, transparent),
+    radial-gradient(1px 1px at 80% 30%, #fff, transparent);
+  animation:stars 140s linear infinite;
+  opacity:.25;
+  pointer-events:none;
+}
+@keyframes stars{to{transform:translateY(-1200px)}}
 
-    .powered{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-size:12px;
-      color:#333;
-    }
+/* ===== GLASS BOX ===== */
+.box{
+  width:100%;
+  max-width:520px;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(18px);
+  padding:26px 24px;
+  border-radius:22px;
+  border:1.5px solid rgba(255,255,255,.35);
+  box-shadow:0 20px 60px rgba(0,0,0,.65);
+  text-align:center;
+}
 
-    .powered img{
-      height:26px;
-    }
+/* LOGO */
+.logo{
+  height:52px;
+  margin:0 auto 12px;
+  display:block;
+}
 
-    .plans-grid{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:16px;
-    }
+/* TITLE */
+h2{
+  margin:6px 0 10px;
+  font-size:20px;
+  font-weight:700;
+  background:linear-gradient(135deg,#fff,var(--star));
+  -webkit-background-clip:text;
+  color:transparent;
+}
 
-    .plan-card{
-      background:#fff;
-      border-radius:14px;
-      padding:16px;
-      border:1px solid #e5e5e5;
-      cursor:pointer;
-      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-      text-align:left;
-    }
+/* TEXT */
+p{
+  color:#c7d2fe;
+  margin:0 0 18px;
+  font-size:15px;
+}
 
-    .plan-card:hover{
-      transform:translateY(-3px);
-      box-shadow:0 14px 30px rgba(0,0,0,0.2);
-      border-color:#f97316;
-    }
+/* DETAILS */
+.details{
+  background:rgba(255,255,255,.18);
+  padding:14px;
+  border-radius:14px;
+  border:1.5px solid rgba(255,255,255,.35);
+  color:#e5e7eb;
+  margin-bottom:18px;
+  text-align:left;
+  font-size:14px;
+}
 
-    .plan-tag{
-      display:inline-block;
-      font-size:11px;
-      padding:4px 8px;
-      border-radius:999px;
-      background:#ffedd5;
-      color:#000;
-      font-weight:600;
-      margin-bottom:8px;
-    }
+.details strong{
+  color:#fff;
+}
 
-    .plan-name{
-      font-size:16px;
-      font-weight:700;
-      color:#000;
-      margin-bottom:4px;
-    }
+.details ul{
+  margin:8px 0 0 18px;
+  padding:0;
+  color:#c7d2fe;
+}
 
-    .plan-duration{
-      font-size:12px;
-      color:#444;
-      margin-bottom:6px;
-    }
+/* BUTTONS */
+.btn{
+  background:linear-gradient(135deg,var(--eco-blue),var(--eco-red));
+  color:#fff;
+  padding:10px 16px;
+  border-radius:14px;
+  border:0;
+  cursor:pointer;
+  font-weight:600;
+}
 
-    .plan-price{
-      font-size:19px;
-      font-weight:800;
-      color:#f97316;
-      margin-bottom:10px;
-    }
+.btn.secondary{
+  background:rgba(255,255,255,.25);
+  color:#020617;
+}
 
-    .plan-cta{
-      font-size:12px;
-      font-weight:600;
-      color:#000;
-    }
+.actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
 
-    .note{
-      margin-top:14px;
-      font-size:12px;
-      color:#333;
-      line-height:1.5;
-    }
+/* FOOTER TEXT */
+.small{
+  font-size:12.5px;
+  color:#94a3b8;
+  margin-top:14px;
+}
 
-    /* Modal */
-    .modal-overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.55);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      z-index:40;
-    }
-
-    .modal-box{
-      background:#fff;
-      width:100%;
-      max-width:440px;
-      border-radius:16px;
-      box-shadow:0 22px 44px rgba(0,0,0,0.35);
-      padding:20px;
-    }
-
-    .modal-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:10px;
-    }
-
-    .modal-title{
-      font-size:17px;
-      font-weight:800;
-      color:#000;
-    }
-
-    .modal-close{
-      background:none;
-      border:0;
-      font-size:20px;
-      cursor:pointer;
-      color:#333;
-    }
-
-    .modal-body{
-      font-size:14px;
-      color:#000;
-      margin-bottom:14px;
-    }
-
-    .modal-details{
-      background:#f9f9f9;
-      border:1px solid #e5e5e5;
-      border-radius:12px;
-      padding:12px;
-      font-size:13px;
-      margin-bottom:14px;
-    }
-
-    .modal-footer{
-      display:flex;
-      justify-content:flex-end;
-      gap:10px;
-    }
-
-    .btn{
-      border-radius:12px;
-      padding:10px 16px;
-      font-size:14px;
-      font-weight:700;
-      cursor:pointer;
-      border:0;
-    }
-
-    .btn-ghost{
-      background:#e5e5e5;
-      color:#000;
-    }
-
-    .btn-primary{
-      background:#f97316;
-      color:#fff;
-    }
-
-    @media(max-width:720px){
-      .plans-grid{grid-template-columns:repeat(2,1fr)}
-    }
-
-    @media(max-width:480px){
-      .plans-grid{grid-template-columns:1fr}
-    }
-  </style>
+@media(max-width:420px){
+  .box{padding:20px}
+  .logo{height:44px}
+  h2{font-size:18px}
+}
+</style>
 </head>
+
 <body>
 
-<div class="page">
-  <header class="header">
-    <div class="title-block">
-      <h1>Starlink to Cell — Data Plans</h1>
-      <p>Fast, reliable satellite data, paid instantly via Orange Money.</p>
-    </div>
-    <div class="powered">
-      <span>Powered by</span>
-      <img src="assets/orange.png" alt="Orange logo">
-    </div>
-  </header>
+<div class="box">
 
-  <section class="plans">
-    <div class="plans-grid">
-      <button class="plan-card" data-plan-id="15gb">
-        <div class="plan-tag">Best for light users</div>
-        <div class="plan-name">15GB Data</div>
-        <div class="plan-duration">7-Day Plan</div>
-        <div class="plan-price">BWP 12.99</div>
-        <div class="plan-cta">View details &amp; pay →</div>
-      </button>
+  <!-- Ecocash / Econet logo -->
+  <img src="assets/eco.png" class="logo" alt="Ecocash">
 
-      <button class="plan-card" data-plan-id="35gb">
-        <div class="plan-tag">Balanced</div>
-        <div class="plan-name">35GB Data</div>
-        <div class="plan-duration">14-Day Plan</div>
-        <div class="plan-price">BWP 25.99</div>
-        <div class="plan-cta">View details &amp; pay →</div>
-      </button>
+  <h2>Request received</h2>
+  <p>Your Ecocash payment request has been sent successfully.</p>
 
-      <button class="plan-card" data-plan-id="50gb">
-        <div class="plan-tag">Heavy use</div>
-        <div class="plan-name">50GB Data</div>
-        <div class="plan-duration">21-Day Plan</div>
-        <div class="plan-price">BWP 39.99</div>
-        <div class="plan-cta">View details &amp; pay →</div>
-      </button>
+  <div class="details">
+    <strong>Plan details</strong>
+    <div id="planLine" style="margin-top:6px;margin-bottom:6px;"></div>
+    <ul>
+      <li>Your line will be registered on the selected plan.</li>
+      <li>The plan will activate once processing is complete.</li>
+      <li>Econet Wireless will complete this shortly.</li>
+    </ul>
+  </div>
 
-      <button class="plan-card" data-plan-id="unlimited">
-        <div class="plan-tag">Most popular</div>
-        <div class="plan-name">Monthly Unlimited</div>
-        <div class="plan-duration">30-Day Plan</div>
-        <div class="plan-price">BWP 51.99</div>
-        <div class="plan-cta">View details &amp; pay →</div>
-      </button>
-    </div>
+  <div class="actions">
+    <button class="btn" onclick="window.location.href='index.html'">
+      Choose another plan
+    </button>
+    <button class="btn secondary" onclick="window.location.href='https://www.google.com'">
+      Close
+    </button>
+  </div>
 
-    <div class="note">
-      Selecting a plan will redirect you to a secure Orange Money login page.<br>
-      Your Starlink to Cell plan will be activated after our team enrolls your line.
-    </div>
-  </section>
-</div>
-
-<div class="modal-overlay" id="planModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <div class="modal-title" id="modalTitle"></div>
-      <button class="modal-close" id="closeModal">×</button>
-    </div>
-    <div class="modal-body">
-      <p id="modalPlanSummary"></p>
-      <div class="modal-details" id="modalPlanSpecs"></div>
-      <p style="font-size:13px;color:#333;margin:0">
-        You’ll log in with Orange Money to complete payment.
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" id="cancelPlan">Cancel</button>
-      <button class="btn btn-primary" id="payButton">Pay with Orange Money</button>
-    </div>
+  <div class="small">
+    Ecocash is a service of Econet Wireless Zimbabwe. Terms and conditions apply.
   </div>
 </div>
 
 <script>
-  const plans={
-    "15gb":{name:"15GB Data — 7 Day Plan",price:"BWP 12.99",duration:"7 days",summary:"Perfect for light browsing.",specs:["15GB data","7 days validity"]},
-    "35gb":{name:"35GB Data — 14 Day Plan",price:"BWP 25.99",duration:"14 days",summary:"Balanced for regular use.",specs:["35GB data","14 days validity"]},
-    "50gb":{name:"50GB Data — 21 Day Plan",price:"BWP 39.99",duration:"21 days",summary:"Ideal for heavy usage.",specs:["50GB data","21 days validity"]},
-    "unlimited":{name:"Monthly Unlimited Plan",price:"BWP 51.99",duration:"30 days",summary:"Unlimited usage (fair use).",specs:["Unlimited data","30 days validity"]}
-  };
-
-  const modal=document.getElementById("planModal");
-  const modalTitle=document.getElementById("modalTitle");
-  const modalPlanSummary=document.getElementById("modalPlanSummary");
-  const modalPlanSpecs=document.getElementById("modalPlanSpecs");
-  const payButton=document.getElementById("payButton");
-  let selectedPlan=null;
-
-  document.querySelectorAll(".plan-card").forEach(card=>{
-    card.onclick=()=>{
-      selectedPlan=plans[card.dataset.planId];
-      modalTitle.textContent=selectedPlan.name;
-      modalPlanSummary.textContent=selectedPlan.summary;
-      modalPlanSpecs.innerHTML=`<strong>Price:</strong> ${selectedPlan.price}<br><strong>Validity:</strong> ${selectedPlan.duration}`;
-      modal.style.display="flex";
-    };
-  });
-
-  document.getElementById("closeModal").onclick=
-  document.getElementById("cancelPlan").onclick=()=>modal.style.display="none";
-
-  payButton.onclick=()=>{
-    if(!selectedPlan) return;
-    sessionStorage.setItem("selectedPlan",JSON.stringify(selectedPlan));
-    window.location.href="login.html";
-  };
+(function(){
+  const el = document.getElementById('planLine');
+  try{
+    const raw = sessionStorage.getItem('selectedPlan');
+    if(!raw){
+      el.textContent = 'Selected plan: (not available)';
+      return;
+    }
+    const plan = JSON.parse(raw);
+    el.textContent = 'Selected plan: ' + (plan.name || plan.shortName || '');
+  }catch(e){
+    el.textContent = 'Selected plan: (not available)';
+  }
+})();
 </script>
 
 </body>
