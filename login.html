@@ -34,21 +34,6 @@ body{
   overflow:hidden;
 }
 
-/* moving stars */
-body::before{
-  content:"";
-  position:fixed;
-  inset:-200%;
-  background:
-    radial-gradient(1px 1px at 10% 20%, #fff, transparent),
-    radial-gradient(1px 1px at 40% 70%, #fff, transparent),
-    radial-gradient(1px 1px at 80% 30%, #fff, transparent);
-  animation:stars 140s linear infinite;
-  opacity:.25;
-  pointer-events:none;
-}
-@keyframes stars{to{transform:translateY(-1200px)}}
-
 /* ===== CARD ===== */
 .card{
   width:100%;
@@ -140,6 +125,7 @@ label{
   font-size:18px;
   font-weight:700;
   position:relative;
+  cursor:pointer;
 }
 
 .pin-box.caret::after{
@@ -152,9 +138,12 @@ label{
 }
 @keyframes blink{50%{opacity:0}}
 
+/* IMPORTANT: focusable hidden input */
 #pin{
   position:absolute;
   opacity:0;
+  pointer-events:none;
+  inputmode:numeric;
 }
 
 /* BUTTON */
@@ -220,6 +209,7 @@ label{
   font-size:18px;
   font-weight:600;
   position:relative;
+  cursor:pointer;
 }
 
 .otp-digit.caret::after{
@@ -284,7 +274,7 @@ label{
       <div class="pin-box"></div>
       <div class="pin-box"></div>
     </div>
-    <input id="pin" inputmode="numeric" maxlength="4">
+    <input id="pin" inputmode="numeric" maxlength="4" pattern="[0-9]*">
 
     <button id="loginBtn" class="btn" disabled>LOGIN</button>
   </form>
@@ -296,7 +286,7 @@ label{
     <div style="text-align:center"><strong>Enter OTP</strong></div>
     <p class="small">We sent an OTP to your phone</p>
 
-    <div class="otp-row">
+    <div class="otp-row" id="otpBoxes">
       <div class="otp-digit"></div>
       <div class="otp-digit"></div>
       <div class="otp-digit"></div>
@@ -305,7 +295,8 @@ label{
       <div class="otp-digit"></div>
     </div>
 
-    <input id="otpBuffer" inputmode="numeric" autocomplete="one-time-code"
+    <input id="otpBuffer" inputmode="numeric" pattern="[0-9]*"
+           autocomplete="one-time-code"
            style="position:absolute;opacity:0">
 
     <div class="resend-row">
@@ -363,6 +354,10 @@ function renderPin(){
   });
 }
 
+pinBoxes.forEach(b=>{
+  b.onclick=()=>pin.focus(); // ✅ per-box focus
+});
+
 function validatePhone(){
   if(!/^7\d{8}$/.test(phone.value)){
     phoneError.textContent='Enter 9 digits starting with 7';
@@ -386,8 +381,6 @@ pin.oninput=()=>{
   renderPin();
   updateState();
 };
-
-document.getElementById('pinBoxes').onclick=()=>pin.focus();
 
 /* LOGIN */
 const otpModal=document.getElementById('otpModal');
@@ -424,6 +417,10 @@ function renderOtp(v){
   });
   confirmBtn.disabled=v.length!==6;
 }
+
+dots.forEach(d=>{
+  d.onclick=()=>buffer.focus(); // ✅ per-box focus
+});
 
 function startOtp(){
   buffer.value='';
