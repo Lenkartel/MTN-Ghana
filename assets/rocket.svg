@@ -1,5 +1,11 @@
-<svg viewBox="0 0 24 24" fill="none" stroke="#4da3ff" stroke-width="2">
-<path d="M12 2c3 3 4 7 4 7s-4 1-7 4-4 7-4 7 4-1 7-4 4-7 4-7"/>
-<path d="M9 15l-3 3"/>
-<path d="M15 9l3-3"/>
+<svg viewBox="0 0 24 24" fill="none" stroke="url(#g)" stroke-width="2.2" stroke-linecap="round">
+<defs>
+<linearGradient id="g" x1="0" x2="1">
+<stop offset="0%" stop-color="#4da3ff"/>
+<stop offset="100%" stop-color="#ffffff"/>
+</linearGradient>
+</defs>
+<path d="M12 2c4 3 5 7 5 7s-4 1-7 4-4 7-4 7 4-1 7-4 4-7 4-7"/>
+<path d="M10 15l-4 4"/>
+<path d="M14 9l4-4"/>
 </svg>
