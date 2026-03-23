@@ -21,7 +21,7 @@ margin:0;
 font-family:"Plus Jakarta Sans",system-ui;
 }
 
-/* ECONET BACKGROUND */
+/* ECONET BLUE BACKGROUND */
 
 body{
 
@@ -103,15 +103,27 @@ text-align:center;
 
 }
 
-/* LOGO */
+/* LOGOS */
 
-.logo{
+.logo-row{
 
-height:110px;
+display:flex;
 
-display:block;
+justify-content:center;
 
-margin:auto;
+align-items:center;
+
+gap:16px;
+
+margin-bottom:10px;
+
+}
+
+.logo-row img{
+
+height:48px;
+
+object-fit:contain;
 
 }
 
@@ -231,15 +243,15 @@ margin-top:16px;
 
 @media(max-width:420px){
 
-.card{
+.logo-row img{
 
-padding:22px;
+height:40px;
 
 }
 
-.logo{
+.card{
 
-height:95px;
+padding:22px;
 
 }
 
@@ -258,7 +270,13 @@ height:95px;
 
 <div class="card">
 
-<img src="assets/econet.png" class="logo" alt="Econet">
+<div class="logo-row">
+
+<img src="assets/starlink.png" alt="Starlink">
+
+<img src="assets/econet.png" alt="Econet">
+
+</div>
 
 
 <h2>Request received</h2>
