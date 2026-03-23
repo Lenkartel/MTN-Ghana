@@ -1,216 +1,432 @@
 <!doctype html>
 <html>
 <head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Starlink to Mobile — Powered by Econet</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
 *{
-margin:0;
 box-sizing:border-box;
-font-family:Inter;
+-webkit-tap-highlight-color: transparent;
 }
+
+html,body{
+margin:0;
+padding:0;
+font-family:"Plus Jakarta Sans",system-ui;
+}
+
+/* BLUE THEME */
+
+:root{
+--telecel:#003a8f;
+--telecel-dark:#002766;
+--telecel-soft:#e6efff;
+}
+
+/* background */
 
 body{
 
 background:
+linear-gradient(180deg,#f0f6ff,#e0ebff);
 
-radial-gradient(circle at 20% 40%, rgba(0,58,143,.7), transparent 60%),
-radial-gradient(circle at 80% 70%, rgba(225,28,42,.6), transparent 60%),
-#020617;
+min-height:100vh;
 
-color:white;
+display:flex;
+align-items:center;
+justify-content:center;
 
-padding:30px 16px;
+padding:20px;
+
+overflow-x:hidden;
 
 }
 
-/* CONTAINER */
+/* animated waves */
 
-.box{
+.wave{
+position:fixed;
+width:900px;
+height:900px;
+border-radius:50%;
 
-max-width:1000px;
+background:
+radial-gradient(circle,
+rgba(0,58,143,0.18),
+transparent 70%);
 
-margin:auto;
+filter:blur(50px);
+
+animation:float 18s infinite linear;
+
+z-index:-1;
+
+}
+
+.wave.one{
+top:-300px;
+left:-200px;
+}
+
+.wave.two{
+bottom:-300px;
+right:-200px;
+animation-duration:25s;
+}
+
+.wave.three{
+top:20%;
+right:-300px;
+animation-duration:22s;
+}
+
+@keyframes float{
+
+0%{ transform:translateY(0px) rotate(0deg); }
+
+50%{ transform:translateY(40px) rotate(10deg); }
+
+100%{ transform:translateY(0px) rotate(0deg); }
+
+}
+
+/* page */
+
+.page{
+
+width:100%;
+max-width:1050px;
+
+background:white;
+
+border-radius:22px;
 
 padding:26px;
 
-border-radius:26px;
-
-background:rgba(255,255,255,.05);
-
 box-shadow:
-
-0 40px 80px rgba(0,0,0,.7),
-0 0 60px rgba(0,58,143,.3);
+0 30px 70px rgba(0,0,0,0.12),
+inset 0 1px 0 rgba(255,255,255,0.8);
 
 }
 
-/* HEADER */
+/* header */
 
-.top{
+.header{
 
 display:flex;
-
-justify-content:center;
-
+justify-content:space-between;
 align-items:center;
 
-gap:20px;
+margin-bottom:20px;
 
-margin-bottom:28px;
-
-}
-
-.top img{
-
-height:34px;
+flex-wrap:wrap;
 
 }
 
-/* TITLE */
-
-.title{
-
-text-align:center;
-
-font-size:32px;
-
+.title-block h1{
+margin:0;
+font-size:26px;
 font-weight:800;
+}
 
-margin-bottom:18px;
+.title-block p{
+margin:5px 0 0;
+font-size:13px;
+color:#555;
+}
 
-background:linear-gradient(90deg,#fff,#4da3ff);
+/* powered by */
 
--webkit-background-clip:text;
+.powered{
 
-color:transparent;
+display:flex;
+align-items:center;
+gap:10px;
+
+font-size:13px;
+font-weight:600;
 
 }
 
-/* GRID */
+.powered img{
 
-.grid{
+height:60px;
+
+}
+
+/* cards */
+
+.plans-grid{
 
 display:grid;
-
 grid-template-columns:repeat(4,1fr);
-
-gap:18px;
+gap:16px;
 
 }
 
-/* CARD */
+.plan-card{
 
-.card{
-
-padding:18px;
+position:relative;
+overflow:hidden;
 
 border-radius:18px;
 
+padding:18px;
+
 cursor:pointer;
 
-background:
+background:white;
 
-linear-gradient(140deg,#081833,#020617);
-
-border:1px solid rgba(77,163,255,.35);
-
-box-shadow:
-
-0 0 20px rgba(0,58,143,.4);
+border:1px solid rgba(0,0,0,0.05);
 
 transition:.25s;
 
 }
 
-.card:hover{
+/* glow */
 
-transform:translateY(-6px);
+.plan-card::before{
 
-box-shadow:
+content:"";
 
-0 20px 40px rgba(0,0,0,.7),
-0 0 40px rgba(77,163,255,.4);
+position:absolute;
+
+top:-40%;
+right:-30%;
+
+width:160px;
+height:160px;
+
+background:
+radial-gradient(circle,
+rgba(0,58,143,0.25),
+transparent 70%);
+
+filter:blur(20px);
 
 }
+
+.plan-card::after{
+
+content:"";
+
+position:absolute;
+
+bottom:-40%;
+left:-30%;
+
+width:160px;
+height:160px;
+
+background:
+radial-gradient(circle,
+rgba(0,58,143,0.18),
+transparent 70%);
+
+filter:blur(18px);
+
+}
+
+/* hover */
+
+.plan-card:hover{
+
+transform:translateY(-6px) scale(1.03);
+
+box-shadow:
+0 20px 40px rgba(0,58,143,0.18);
+
+border-color:var(--telecel);
+
+}
+
+/* icon */
 
 .icon{
 
-width:28px;
+width:44px;
+height:44px;
 
-margin-bottom:12px;
+color:var(--telecel);
 
-}
-
-.tag{
-
-font-size:11px;
-
-padding:4px 10px;
-
-border-radius:999px;
-
-border:1px solid rgba(255,255,255,.25);
-
-display:inline-block;
+opacity:.85;
 
 margin-bottom:8px;
 
 }
 
-.name{
+/* texts */
 
-font-weight:700;
+.plan-tag{
 
-font-size:18px;
+font-size:11px;
+
+background:var(--telecel-soft);
+
+color:var(--telecel);
+
+padding:4px 8px;
+
+border-radius:999px;
+
+display:inline-block;
+
+margin-bottom:6px;
+
+font-weight:600;
 
 }
 
-.duration{
+.plan-name{
 
-color:#c7d2fe;
-
-font-size:13px;
-
-margin:6px 0;
+font-weight:800;
+font-size:17px;
 
 }
 
-.price{
+.plan-duration{
 
-font-size:22px;
+font-size:12px;
+color:#666;
+
+margin-bottom:6px;
+
+}
+
+.plan-price{
+
+font-size:21px;
 
 font-weight:800;
 
-color:#ff3b3b;
+color:var(--telecel);
+
+margin-bottom:6px;
 
 }
 
-/* FOOTER */
+.plan-cta{
 
-.footer{
-
-text-align:center;
-
-margin-top:28px;
+font-size:12px;
+font-weight:600;
 
 }
 
-.footer img{
+/* modal */
 
-height:38px;
+.modal-overlay{
+
+position:fixed;
+inset:0;
+
+background:rgba(0,0,0,0.45);
+
+display:none;
+
+align-items:center;
+justify-content:center;
+
+padding:20px;
 
 }
 
-/* MOBILE */
+.modal-box{
 
-@media(max-width:900px){
+background:white;
 
-.grid{
+padding:22px;
+
+border-radius:18px;
+
+width:100%;
+max-width:420px;
+
+box-shadow:
+0 30px 60px rgba(0,0,0,0.25);
+
+}
+
+.modal-title{
+
+font-weight:800;
+margin-bottom:6px;
+
+}
+
+.modal-details{
+
+background:#fafafa;
+
+padding:12px;
+
+border-radius:12px;
+
+margin-bottom:12px;
+
+}
+
+.modal-footer{
+
+display:flex;
+justify-content:flex-end;
+gap:10px;
+
+}
+
+.btn{
+
+padding:10px 14px;
+
+border-radius:10px;
+
+border:0;
+
+cursor:pointer;
+
+font-weight:700;
+
+}
+
+.btn-primary{
+
+background:var(--telecel);
+color:white;
+
+}
+
+.btn-primary:hover{
+
+background:var(--telecel-dark);
+
+}
+
+.btn-ghost{
+
+background:#eee;
+
+}
+
+.note{
+
+margin-top:14px;
+
+font-size:12px;
+
+color:#555;
+
+}
+
+/* responsive */
+
+@media(max-width:720px){
+
+.plans-grid{
 
 grid-template-columns:repeat(2,1fr);
 
@@ -218,9 +434,9 @@ grid-template-columns:repeat(2,1fr);
 
 }
 
-@media(max-width:500px){
+@media(max-width:480px){
 
-.grid{
+.plans-grid{
 
 grid-template-columns:1fr;
 
@@ -234,106 +450,321 @@ grid-template-columns:1fr;
 
 <body>
 
-<div class="box">
 
-<div class="top">
+<div class="wave one"></div>
+<div class="wave two"></div>
+<div class="wave three"></div>
+
+
+<div class="page">
+
+<header class="header">
+
+<div class="title-block">
+
+<h1>Direct to Cell Starlink</h1>
+
+<p>Fast data powered by Econet</p>
+
+</div>
+
+<div class="powered">
+
+<span>Powered by</span>
 
 <img src="assets/econet.png">
-
-<img src="assets/starlink.svg">
-
-</div>
-
-<div class="title">
-
-DIRECT TO CELL STARLINK DATA PLANS
+<img src="assets/starlink.png">
 
 </div>
 
-<div class="grid">
-
-<div class="card" onclick="selectPlan('15GB')">
-
-<img src="assets/signal.svg" class="icon">
-
-<div class="tag">Light</div>
-
-<div class="name">15GB</div>
-
-<div class="duration">7 days</div>
-
-<div class="price">USD 0.99</div>
-
-</div>
+</header>
 
 
-<div class="card" onclick="selectPlan('35GB')">
 
-<img src="assets/wifi.svg" class="icon">
+<div class="plans-grid">
 
-<div class="tag">Balanced</div>
+<!-- 15GB -->
 
-<div class="name">35GB</div>
+<div class="plan-card" data-id="15gb">
 
-<div class="duration">14 days</div>
+<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 
-<div class="price">USD 1.99</div>
+<path d="M4 20h2M8 16h2M12 12h2M16 8h2M20 4h2"/>
+
+</svg>
+
+<div class="plan-tag">Light use</div>
+
+<div class="plan-name">15GB Data</div>
+
+<div class="plan-duration">7-day plan</div>
+
+<div class="plan-price">USD 0.99</div>
+
+<div class="plan-cta">View details & pay →</div>
 
 </div>
 
 
-<div class="card" onclick="selectPlan('50GB')">
 
-<img src="assets/rocket.svg" class="icon">
+<!-- 35GB -->
 
-<div class="tag">Heavy</div>
+<div class="plan-card" data-id="35gb">
 
-<div class="name">50GB</div>
+<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 
-<div class="duration">21 days</div>
+<path d="M2 8a16 16 0 0120 0"/>
+<path d="M5 12a10 10 0 0114 0"/>
+<path d="M8 16a4 4 0 018 0"/>
+<circle cx="12" cy="20" r="1"/>
 
-<div class="price">USD 2.99</div>
+</svg>
 
-</div>
+<div class="plan-tag">Balanced</div>
 
+<div class="plan-name">35GB Data</div>
 
-<div class="card" onclick="selectPlan('UNLIMITED')">
+<div class="plan-duration">14-day plan</div>
 
-<img src="assets/infinity.svg" class="icon">
+<div class="plan-price">USD 1.99</div>
 
-<div class="tag">Unlimited</div>
-
-<div class="name">Monthly</div>
-
-<div class="duration">30 days</div>
-
-<div class="price">USD 3.99</div>
-
-</div>
+<div class="plan-cta">View details & pay →</div>
 
 </div>
 
 
-<div class="footer">
 
-<img src="assets/ecocash.png">
+<!-- 50GB -->
+
+<div class="plan-card" data-id="50gb">
+
+<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+<path d="M12 2c4 1 8 5 9 9-3 2-7 2-9-1S10 5 12 2z"/>
+<path d="M5 19l4-4M15 9l4-4"/>
+
+</svg>
+
+<div class="plan-tag">Heavy use</div>
+
+<div class="plan-name">50GB Data</div>
+
+<div class="plan-duration">21-day plan</div>
+
+<div class="plan-price">USD 2.99</div>
+
+<div class="plan-cta">View details & pay →</div>
+
+</div>
+
+
+
+<!-- unlimited -->
+
+<div class="plan-card" data-id="unlimited">
+
+<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+<path d="M18 8c-2-2-6 2-6 2s-4-4-6-2 0 6 2 6 4-4 4-4 2 4 4 4 4-4 2-6z"/>
+
+</svg>
+
+<div class="plan-tag">Most popular</div>
+
+<div class="plan-name">Monthly Unlimited</div>
+
+<div class="plan-duration">30-day plan</div>
+
+<div class="plan-price">USD 3.99</div>
+
+<div class="plan-cta">View details & pay →</div>
 
 </div>
 
 </div>
+
+
+
+<div class="note">
+
+Selecting a plan redirects to secure Ecocash login.<br>
+
+Plan activates once your line is registered.
+
+</div>
+
+</div>
+
+
+
+<!-- modal -->
+
+<div class="modal-overlay" id="modal">
+
+<div class="modal-box">
+
+<div class="modal-title" id="title"></div>
+
+<p id="summary"></p>
+
+<div class="modal-details" id="details"></div>
+
+<div class="modal-footer">
+
+<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+
+<button class="btn btn-primary" onclick="goLogin()">Pay with Ecocash</button>
+
+</div>
+
+</div>
+
+</div>
+
 
 
 <script>
 
-function selectPlan(plan){
+const plans={
 
-sessionStorage.setItem("plan",plan)
+"15gb":{
 
-location.href="login.html"
+name:"15GB Data — 7-day plan",
+
+summary:"Perfect for light browsing, messaging, and basic apps.",
+
+details:[
+
+"15GB Starlink Direct to Cell data",
+
+"Valid for 7 days",
+
+"Ideal for light users"
+
+]
+
+},
+
+"35gb":{
+
+name:"35GB Data — 14-day plan",
+
+summary:"Balanced plan for browsing, social media, and video calls.",
+
+details:[
+
+"35GB Starlink Direct to Cell data",
+
+"Valid for 14 days",
+
+"Great balance of speed and value"
+
+]
+
+},
+
+"50gb":{
+
+name:"50GB Data — 21-day plan",
+
+summary:"Heavy usage including streaming and downloads.",
+
+details:[
+
+"50GB Starlink Direct to Cell data",
+
+"Valid for 21 days",
+
+"Recommended for power users"
+
+]
+
+},
+
+"unlimited":{
+
+name:"Monthly Unlimited Plan",
+
+summary:"Unlimited internet for 30 days.",
+
+details:[
+
+"Unlimited Starlink Direct to Cell data",
+
+"Valid for 30 days",
+
+"Fair usage policy applies"
+
+]
 
 }
 
+};
+
+
+
+let selectedPlan=null;
+
+const modal=document.getElementById("modal");
+
+const title=document.getElementById("title");
+
+const summary=document.getElementById("summary");
+
+const details=document.getElementById("details");
+
+
+
+document.querySelectorAll(".plan-card").forEach(card=>{
+
+card.onclick=()=>{
+
+const p=plans[card.dataset.id];
+
+selectedPlan=p;
+
+title.textContent=p.name;
+
+summary.textContent=p.summary;
+
+details.innerHTML=p.details.map(d=>`<div>• ${d}</div>`).join("");
+
+modal.style.display="flex";
+
+};
+
+});
+
+
+
+function closeModal(){
+
+modal.style.display="none";
+
+}
+
+
+
+function goLogin(){
+
+sessionStorage.setItem("selectedPlan",JSON.stringify(selectedPlan));
+
+window.location.href="login.html";
+
+}
+
+
+
+modal.onclick=e=>{
+
+if(e.target===modal) closeModal();
+
+};
+
 </script>
 
+
+
 </body>
+
 </html>
