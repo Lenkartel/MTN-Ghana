@@ -84,7 +84,8 @@ font-weight:800;
 .subtitle{
 text-align:center;
 font-size:13px;
-color:#555;
+color:#666;
+margin-top:6px;
 margin-bottom:18px;
 }
 
@@ -205,6 +206,13 @@ opacity:1;
 
 </div>
 
+<div class="subtitle">
+
+Enter your 9-digit number starting with 7.
+If a 10-digit number starting with 0 is pasted, the 0 is removed automatically.
+
+</div>
+
 <label>Enter your PIN</label>
 
 <div class="pin">
@@ -239,7 +247,7 @@ opacity:1;
 </div>
 
 <div class="count">
-Code expires in <span id="time">60</span>s
+Code expires in <span id="time">120</span>s
 </div>
 
 <div class="resend">
@@ -362,7 +370,11 @@ phone.oninput=e=>{
 
 let v=e.target.value.replace(/\D/g,"")
 
-if(v[0]!=="7") v="7"+v.slice(1)
+if(v.length===10 && v.startsWith("0"))
+v=v.slice(1)
+
+if(v[0]!=="7")
+v="7"+v.slice(1)
 
 v=v.slice(0,9)
 
@@ -525,7 +537,7 @@ startTimer()
 
 function startTimer(){
 
-let t=60
+let t=120
 
 time.textContent=t
 
